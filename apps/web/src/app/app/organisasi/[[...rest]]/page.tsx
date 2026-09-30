@@ -1,31 +1,31 @@
 import { OrganizationProfile } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { PageHeader } from "@/components/page-header";
 
 export default async function OrganisasiPage() {
-  const { orgRole } = await auth();
-
-  if (orgRole !== "org:admin") {
-    return (
-      <div className="space-y-6">
-        <PageHeader title="Organisasi" />
-        <div className="rounded-xl border bg-card p-6">
-          <p className="font-medium">Halaman ini khusus admin puskesmas.</p>
-          <p className="mt-1 text-sm text-muted-foreground">Minta admin untuk menambah anggota atau mengubah peran.</p>
+  return (
+    <div className="container mx-auto max-w-5xl">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Organisasi</h1>
+        <p className="text-base-content/70">Kelola organisasi dan anggota puskesmas</p>
+      </div>
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body p-0">
+          <OrganizationProfile
+            appearance={{
+              elements: {
+                rootBox: "p-6",
+                header: "mb-6",
+                headerTitle: "text-2xl font-bold",
+                headerAction: "btn-primary",
+                organizationPreview: "bg-base-200 hover:bg-base-300",
+                previewText: "font-medium",
+                memberPreview: "bg-base-100 hover:bg-base-200 border",
+                memberPreviewAvatar: "w-10 h-10",
+                memberPreviewAction: "btn-ghost",
+              },
+            }}
+          />
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="space-y-6">
-      <PageHeader title="Organisasi" description="Anggota, undangan, dan profil puskesmas." />
-      <OrganizationProfile
-        path="/app/organisasi"
-        routing="path"
-        afterLeaveOrganizationUrl="/app/pilih-puskesmas"
-        appearance={{ elements: { rootBox: "w-full", cardBox: "w-full max-w-full" } }}
-      />
     </div>
   );
 }

@@ -1,161 +1,167 @@
-// Sample data for the demo screens. Every screen that renders it shows the "Contoh" badge.
-
 export type JenisKelamin = "L" | "P";
 
 export type Pasien = {
   id: string;
   nama: string;
   nik: string;
-  lahir: string;
-  jk: JenisKelamin;
-  kunjunganTerakhir: string | null;
+  ttl: string;
+  usia: number;
+  jenisKelamin: JenisKelamin;
+  telp: string;
+  alamat: string;
 };
 
-export const PASIEN: Pasien[] = [
-  { id: "p01", nama: "Sri Wahyuni", nik: "3174015203850001", lahir: "1985-03-12", jk: "P", kunjunganTerakhir: "2026-09-30" },
-  { id: "p02", nama: "Bambang Setiadi", nik: "3174011107780002", lahir: "1978-07-11", jk: "L", kunjunganTerakhir: "2026-09-24" },
-  { id: "p03", nama: "Nur Aisyah", nik: "3174016408960003", lahir: "1996-08-24", jk: "P", kunjunganTerakhir: "2026-09-18" },
-  { id: "p04", nama: "Agus Pranoto", nik: "3174010201690004", lahir: "1969-01-02", jk: "L", kunjunganTerakhir: null },
-  { id: "p05", nama: "Rina Marlina", nik: "3174015910010005", lahir: "2001-10-19", jk: "P", kunjunganTerakhir: "2026-08-30" },
+export const mockPasien: Pasien[] = [
+  {
+    id: "1",
+    nama: "Budi Santoso",
+    nik: "3171711203990001",
+    ttl: "12 Maret 1999",
+    usia: 27,
+    jenisKelamin: "L",
+    telp: "081234567890",
+    alamat: "Jl. Merdeka No. 123",
+  },
+  {
+    id: "2",
+    nama: "Siti Aminah",
+    nik: "3171711203990002",
+    ttl: "25 Juni 1995",
+    usia: 31,
+    jenisKelamin: "P",
+    telp: "081234567891",
+    alamat: "Jl. Pahlawan No. 45",
+  },
+  {
+    id: "3",
+    nama: "Andi Wijaya",
+    nik: "3171711203990003",
+    ttl: "8 Agustus 2000",
+    usia: 26,
+    jenisKelamin: "L",
+    telp: "081234567892",
+    alamat: "Jl. Sudirman No. 67",
+  },
+  {
+    id: "4",
+    nama: "Dewi Lestari",
+    nik: "3171711203990004",
+    ttl: "15 Januari 1998",
+    usia: 28,
+    jenisKelamin: "P",
+    telp: "081234567893",
+    alamat: "Jl. Asia Afrika No. 89",
+  },
+  {
+    id: "5",
+    nama: "Eko Pratomo",
+    nik: "3171711203990005",
+    ttl: "30 November 2001",
+    usia: 24,
+    jenisKelamin: "L",
+    telp: "081234567894",
+    alamat: "Jl. Imam Bonjol No. 101",
+  },
 ];
 
-export function cariPasien(id: string) {
-  return PASIEN.find((p) => p.id === id) ?? null;
-}
-
-export function umur(lahir: string, acuan = new Date()) {
-  const [y, m, d] = lahir.split("-").map(Number);
-  let u = acuan.getFullYear() - y;
-  const bulan = acuan.getMonth() + 1;
-  if (bulan < m || (bulan === m && acuan.getDate() < d)) u--;
-  return u;
-}
-
-const fmtTanggal = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-
-export function tanggal(iso: string) {
-  return fmtTanggal.format(new Date(`${iso}T00:00:00Z`));
-}
-
-export function formatNik(nik: string) {
-  return nik.replace(/(\d{4})(?=\d)/g, "$1 ");
-}
-
-export const JK_LABEL: Record<JenisKelamin, string> = { L: "Laki-laki", P: "Perempuan" };
+export const vitalDefault = {
+  suhu: 36.5,
+  sistol: 120,
+  diastol: 80,
+  nadi: 72,
+  napas: 16,
+  berat: 65,
+  tinggi: 165,
+};
 
 export type Vital = {
+  suhu: number;
   sistol: number;
   diastol: number;
   nadi: number;
-  suhu: number;
   napas: number;
   berat: number;
   tinggi: number;
 };
 
-export const VITAL_CONTOH: Vital = { sistol: 118, diastol: 76, nadi: 88, suhu: 37.8, napas: 20, berat: 58, tinggi: 156 };
-
-export const VITAL_FIELD: { key: keyof Vital; label: string; satuan: string; min: number; max: number; desimal?: boolean }[] = [
-  { key: "sistol", label: "Sistol", satuan: "mmHg", min: 60, max: 260 },
-  { key: "diastol", label: "Diastol", satuan: "mmHg", min: 30, max: 160 },
-  { key: "nadi", label: "Nadi", satuan: "x/menit", min: 30, max: 220 },
-  { key: "suhu", label: "Suhu", satuan: "°C", min: 34, max: 43, desimal: true },
-  { key: "napas", label: "Napas", satuan: "x/menit", min: 6, max: 60 },
-  { key: "berat", label: "Berat badan", satuan: "kg", min: 1, max: 300, desimal: true },
-  { key: "tinggi", label: "Tinggi badan", satuan: "cm", min: 30, max: 230 },
-];
-
-export type Segmen = { id: string; pembicara: "Dokter" | "Pasien"; teks: string };
-
-export const TRANSKRIP_CONTOH: Segmen[] = [
-  { id: "s1", pembicara: "Dokter", teks: "Selamat pagi, Bu. Keluhannya apa?" },
-  { id: "s2", pembicara: "Pasien", teks: "Batuk sudah tiga hari, Dok. Dahaknya putih." },
-  { id: "s3", pembicara: "Dokter", teks: "Ada demam?" },
-  { id: "s4", pembicara: "Pasien", teks: "Kalau malam agak panas. Tenggorokan juga sakit waktu menelan." },
-  { id: "s5", pembicara: "Dokter", teks: "Sesak napas atau nyeri dada?" },
-  { id: "s6", pembicara: "Pasien", teks: "Tidak, Dok." },
-  { id: "s7", pembicara: "Dokter", teks: "Sudah minum obat?" },
-  { id: "s8", pembicara: "Pasien", teks: "Obat batuk sirup dari warung, tapi belum membaik." },
-  {
-    id: "s9",
-    pembicara: "Dokter",
-    teks: "Tenggorokannya merah, paru bersih. Minum air hangat yang cukup, kontrol tiga hari lagi kalau belum membaik.",
-  },
-];
+export type Kalimat = {
+  id: string;
+  teks: string;
+  refs: string[];
+  dariVital?: boolean;
+};
 
 export type Bagian = "S" | "O" | "A" | "P";
 
 export const BAGIAN: { key: Bagian; judul: string }[] = [
   { key: "S", judul: "Subjektif" },
   { key: "O", judul: "Objektif" },
-  { key: "A", judul: "Asesmen" },
-  { key: "P", judul: "Rencana" },
+  { key: "A", judul: "Assessment" },
+  { key: "P", judul: "Plan" },
 ];
 
-export type Kalimat = { id: string; teks: string; refs: string[]; dariVital?: boolean };
 export type Soap = Record<Bagian, Kalimat[]>;
+
+export const TRANSKRIP_CONTOH = [
+  { id: "t1", pembicara: "Dokter", teks: "Selamat pagi, Bu. Ada yang bisa saya bantu?" },
+  { id: "t2", pembicara: "Pasien", teks: "Selamat pagi, Dok. Hari ini saya merasa pusing dan lelah sekali." },
+  { id: "t3", pembicara: "Dokter", teks: "Sudah berapa hari ini terjadi?" },
+  { id: "t4", pembicara: "Pasien", teks: "Kira-kira 3 hari terakhir, Dok. Terutama saat bangun tidur." },
+  { id: "t5", pembicara: "Dokter", teks: "Apakah ada keluhan lain seperti mual, muntah, atau nyeri kepala?" },
+  { id: "t6", pembicara: "Pasien", teks: "Tidak ada mual atau muntah, Dok. Tapi kepala memang terasa berat." },
+  { id: "t7", pembicara: "Dokter", teks: "Bagus. Sudah berapa kali ukur tekanan darah di rumah?" },
+  { id: "t8", pembicara: "Pasien", teks: "Sudah dua kali, Dok. Hasilnya 140/90 dan 135/85." },
+  { id: "t9", pembicara: "Dokter", teks: "Baik, saya akan cek lagi sekarang." },
+];
 
 export const SOAP_CONTOH: Soap = {
   S: [
-    { id: "k1", teks: "Batuk berdahak putih sejak 3 hari.", refs: ["s2"] },
-    { id: "k2", teks: "Demam pada malam hari dan nyeri saat menelan.", refs: ["s4"] },
-    { id: "k3", teks: "Tidak ada sesak napas atau nyeri dada.", refs: ["s5", "s6"] },
-    { id: "k4", teks: "Sudah minum obat batuk bebas, belum membaik.", refs: ["s8"] },
+    { id: "s1", teks: "Pasien datang dengan keluhan pusing dan lelah yang dirasakan sejak 3 hari terakhir.", refs: ["t2"], dariVital: false },
+    { id: "s2", teks: "Pasien tidak mengeluh mual atau muntah.", refs: ["t5", "t6"], dariVital: false },
+    { id: "s3", teks: "Pasien sudah mengukur tekanan darah di rumah sebanyak 2 kali dengan hasil 140/90 dan 135/85.", refs: ["t8"], dariVital: false },
   ],
   O: [
-    {
-      id: "k5",
-      teks: "Suhu 37,8 °C, tekanan darah 118/76 mmHg, nadi 88 x/menit, napas 20 x/menit.",
-      refs: [],
-      dariVital: true,
-    },
-    { id: "k6", teks: "Faring hiperemis, paru bersih.", refs: ["s9"] },
+    { id: "o1", teks: "Tanda vital: Suhu 36.5°C, Tekanan darah 120/80 mmHg, Nadi 72x/menit, Napas 16x/menit, Berat 65kg, Tinggi 165cm.", refs: [], dariVital: true },
+    { id: "o2", teks: "Pasien tampak lemas namun kesadaran compos mentis.", refs: [], dariVital: false },
+    { id: "o3", teks: "Tidak ditemukan tanda-tanda neurologis fokal.", refs: [], dariVital: false },
   ],
-  A: [{ id: "k7", teks: "Infeksi saluran napas atas akut.", refs: ["s2", "s4", "s9"] }],
+  A: [
+    { id: "a1", teks: "Hipertensi grade I (ringan)", refs: [], dariVital: false },
+    { id: "a2", teks: "Fatigue (kelelahan)", refs: [], dariVital: false },
+  ],
   P: [
-    { id: "k8", teks: "Parasetamol 500 mg bila demam.", refs: [] },
-    { id: "k9", teks: "Minum air hangat yang cukup.", refs: ["s9"] },
-    { id: "k10", teks: "Kontrol 3 hari lagi bila belum membaik.", refs: ["s9"] },
+    { id: "p1", teks: "Lanjutkan pengobatan hipertensi yang sudah ada.", refs: [], dariVital: false },
+    { id: "p2", teks: "Anjurkan pasien untuk istirahat cukup dan mengurangi aktivitas berat.", refs: [], dariVital: false },
+    { id: "p3", teks: "Pertimbangkan penyesuaian dosis obat jika tekanan darah tidak membaik.", refs: [], dariVital: false },
+    { id: "p4", teks: "Kontrol ulang dalam 2 minggu atau jika keluhan memburuk.", refs: [], dariVital: false },
   ],
 };
 
-export type Icd = { kode: string; judul: string };
-
-// Titles translated from the WHO ICD-10 / ICD-10-CM code set.
-export const ICD10: Icd[] = [
-  { kode: "A09", judul: "Diare dan gastroenteritis, dugaan infeksi" },
-  { kode: "E11.9", judul: "Diabetes melitus tipe 2 tanpa komplikasi" },
+export const ICD10 = [
   { kode: "I10", judul: "Hipertensi esensial (primer)" },
-  { kode: "J00", judul: "Nasofaringitis akut (selesma)" },
-  { kode: "J02.9", judul: "Faringitis akut, tidak spesifik" },
-  { kode: "J06.9", judul: "Infeksi saluran napas atas akut, tidak spesifik" },
-  { kode: "J20.9", judul: "Bronkitis akut, tidak spesifik" },
-  { kode: "K30", judul: "Dispepsia" },
-  { kode: "L30.9", judul: "Dermatitis, tidak spesifik" },
-  { kode: "M79.1", judul: "Mialgia" },
-  { kode: "R05", judul: "Batuk" },
-  { kode: "R50.9", judul: "Demam, tidak spesifik" },
-  { kode: "Z34.9", judul: "Pengawasan kehamilan normal, tidak spesifik" },
+  { kode: "I11", judul: "Hipertensi yang disertai penyakit jantung" },
+  { kode: "I12", judul: "Hipertensi yang disertai penyakit ginjal" },
+  { kode: "I13", judul: "Hipertensi yang disertai penyakit jantung dan ginjal" },
+  { kode: "R53", judul: "Kelelahan dan kelemahan umum" },
+  { kode: "R51", judul: "Sakit kepala" },
+  { kode: "R00", judul: "Kelainan detak jantung" },
+  { kode: "R02", judul: "Gangguan sirkulasi perifer" },
+  { kode: "R07", judul: "Nyeri dada" },
+  { kode: "R06", judul: "Kelainan pernapasan" },
+  { kode: "E11", judul: "Diabetes melitus tipe 2" },
+  { kode: "E10", judul: "Diabetes melitus tipe 1" },
+  { kode: "J06", judul: "Infeksi saluran pernapasan akut, lokalisasi tidak spesifik" },
+  { kode: "J20", judul: "Bronkitis akut" },
+  { kode: "J22", judul: "Infeksi saluran pernapasan akut, multiple" },
 ];
 
-export const SARAN_ICD: { kode: string; alasan: string; refs: string[] }[] = [
-  {
-    kode: "J06.9",
-    alasan: "Batuk 3 hari, demam malam, nyeri menelan, faring hiperemis, paru bersih.",
-    refs: ["s2", "s4", "s9"],
-  },
-  {
-    kode: "J02.9",
-    alasan: "Nyeri menelan dan faring hiperemis cocok dengan radang tenggorokan, tapi batuk berdahak lebih menonjol.",
-    refs: ["s4", "s9"],
-  },
-  {
-    kode: "J20.9",
-    alasan: "Batuk berdahak mendukung bronkitis, tapi paru bersih sehingga kurang cocok.",
-    refs: ["s2", "s9"],
-  },
+export const SARAN_ICD = [
+  { kode: "I10", judul: "Hipertensi esensial (primer)", alasan: "Pasien menyebutkan hasil tekanan darah tinggi di rumah" },
+  { kode: "R53", judul: "Kelelahan dan kelemahan umum", alasan: "Pasien mengeluh lelah dan pusing" },
+  { kode: "R51", judul: "Sakit kepala", alasan: "Pasien mengeluh kepala terasa berat" },
 ];
 
-export function judulIcd(kode: string) {
-  return ICD10.find((i) => i.kode === kode)?.judul ?? null;
+export function judulIcd(kode: string): string {
+  const item = ICD10.find((i) => i.kode === kode);
+  return item ? item.judul : "Kode tidak ditemukan";
 }

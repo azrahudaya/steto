@@ -5,41 +5,35 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export function AppNav({ admin, mobile = false }: { admin: boolean; mobile?: boolean }) {
-  const path = usePathname();
-  const items = [
+  const pathname = usePathname();
+  const base = mobile ? "flex flex-col gap-2" : "flex items-center gap-2";
+
+  const links = [
     { href: "/app/pasien", label: "Pasien" },
-    ...(admin ? [{ href: "/app/organisasi", label: "Organisasi" }] : []),
-    { href: "/app/akun", label: "Akun" },
+    { href: "/app/organisasi", label: "Organisasi" },
   ];
 
+  if (admin) {
+    links.push({ href: "/app/akun", label: "Akun" });
+  }
+
   return (
-    <nav aria-label="Menu aplikasi" className={mobile ? "border-t px-4 sm:hidden" : "hidden sm:block"}>
-      <ul className={cn("flex", mobile ? "gap-6" : "gap-1")}>
-        {items.map((it) => {
-          const aktif = path.startsWith(it.href);
-          return (
-            <li key={it.href}>
-              <Link
-                href={it.href}
-                aria-current={aktif ? "page" : undefined}
-                className={cn(
-                  "flex items-center text-sm",
-                  mobile ? "h-11 border-b-2" : "h-9 rounded-md px-3",
-                  aktif
-                    ? mobile
-                      ? "border-foreground font-medium"
-                      : "bg-muted font-medium"
-                    : mobile
-                      ? "border-transparent text-muted-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-              >
-                {it.label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+    <nav className={base}>
+      <Link href="/" className="font-bold text-primary">
+        steto
+      </Link>
+      {links.map((l) => (
+        <Link
+          key={l.href}
+          href={l.href}
+          className={cn(
+            "px-3 py-2 rounded-md text-sm font-medium",
+            pathname === l.href ? "bg-primary text-primary-content" : "hover:bg-base-200",
+          )}
+        >
+          {l.label}
+        </Link>
+      ))}
     </nav>
   );
 }

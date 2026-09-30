@@ -1,34 +1,14 @@
-import { Badge } from "@/components/ui/badge";
-
 export function ContohBadge() {
   return (
-    <Badge variant="outline" className="h-6 border-input px-2 text-xs text-muted-foreground">
-      Contoh
-    </Badge>
+    <span className="badge badge-warning text-xs font-medium">Contoh</span>
   );
 }
 
-export function PageHeader({
-  title,
-  description,
-  contoh,
-  children,
-}: {
-  title: string;
-  description?: string;
-  contoh?: boolean;
-  children?: React.ReactNode;
-}) {
+export function PageHeader({ title, description }: { title: string; description?: string }) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div className="space-y-1.5">
-        <div className="flex flex-wrap items-center gap-2.5">
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
-          {contoh && <ContohBadge />}
-        </div>
-        {description && <p className="max-w-prose text-muted-foreground">{description}</p>}
-      </div>
-      {children && <div className="flex flex-wrap gap-2">{children}</div>}
+    <div className="mb-6">
+      <h1 className="text-3xl font-bold">{title}</h1>
+      {description && <p className="text-base-content/70 mt-1">{description}</p>}
     </div>
   );
 }

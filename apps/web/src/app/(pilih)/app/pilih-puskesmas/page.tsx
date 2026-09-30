@@ -1,29 +1,44 @@
-import { OrganizationList, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { Brand } from "@/components/brand";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default async function PilihPuskesmas() {
-  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) redirect("/");
-  const { userId, orgId } = await auth();
-  if (!userId) redirect("/sign-in");
-  if (orgId) redirect("/app/pasien");
-
+export default function PilihPuskesmasPage() {
   return (
-    <div className="min-h-dvh">
-      <header className="border-b">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Brand className="h-7" />
-          <UserButton />
+    <div className="min-h-dvh bg-base-200 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-base-100 rounded-xl shadow-lg p-6">
+        <div className="flex flex-col items-center mb-6">
+          <h1 className="text-2xl font-bold mb-2">Pilih Puskesmas</h1>
+          <p className="text-base-content/70 text-center">Pilih organisasi untuk masuk</p>
         </div>
-      </header>
-      <main className="mx-auto flex max-w-6xl flex-col items-center px-4 py-12 sm:px-6 sm:py-16">
-        <div className="mb-8 max-w-md text-center">
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Pilih puskesmas</h1>
-          <p className="mt-2 text-muted-foreground">Pilih puskesmas tempat bertugas hari ini.</p>
+
+        <div className="card bg-base-200 shadow mb-4">
+          <div className="card-body">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                🏥
+              </div>
+              <div>
+                <p className="font-medium">Puskesmas Demo Steto</p>
+                <p className="text-sm text-base-content/60">Organisasi demo</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <OrganizationList hidePersonal afterSelectOrganizationUrl="/app/pasien" afterCreateOrganizationUrl="/app/pasien" />
-      </main>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-base-content/60">
+            Belum punya organisasi?{" "}
+            <Link href="/app/organisasi" className="link link-primary">
+              Buat organisasi baru
+            </Link>
+          </p>
+        </div>
+
+        <div className="mt-6 text-center">
+          <Button size="lg" className="w-full">
+            Masuk dengan Akun Demo
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
