@@ -1,121 +1,81 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Brand } from "@/components/brand";
+import { LandingExample } from "@/components/landing-example";
 
-export default async function Home() {
+export const metadata: Metadata = {
+  title: "Steto | Catatan medis, dimulai dari percakapan",
+  description: "Kenali alur dokumentasi Steto untuk puskesmas. Lihat contoh percakapan dan draf SOAP, lalu masuk dengan akun Anda.",
+};
+
+const workflow = [
+  { number: "01", title: "Mulai dari pasien", body: "Siapkan data pasien dan tanda vital sebelum konsultasi.", role: "Perawat" },
+  { number: "02", title: "Minta izin, lalu rekam", body: "Persetujuan pasien menjadi awal pencatatan percakapan.", role: "Dokter / bidan" },
+  { number: "03", title: "Baca ulang drafnya", body: "Cocokkan catatan SOAP dengan percakapan dan hasil pemeriksaan.", role: "Dokter / bidan" },
+  { number: "04", title: "Lengkapi dokumentasi", body: "Tinjau kode ICD-10 dan catatan kunjungan sebelum menyetujui.", role: "Tenaga medis" },
+];
+
+export default function Home() {
   return (
-    <div className="min-h-screen bg-base-100 font-sans">
-      {/* Navbar */}
-      <nav className="bg-base-100 border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Steto" className="w-8 h-8" />
-            </Link>
-            <div className="hidden md:flex items-center gap-4">
-              <Link href="#fitur" className="link link-primary">Fitur</Link>
-              <Link href="#cara-kerja" className="link link-primary">Cara Kerja</Link>
-              <Link href="#faq" className="link link-primary">FAQ</Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">Masuk</Button>
-              <Button size="sm" className="btn-primary">Daftar</Button>
-            </div>
+    <div className="steto-landing" data-theme="steto">
+      <a className="landing-skip" href="#utama">Lewati navigasi</a>
+      <header className="landing-header">
+        <nav className="du-navbar landing-container" aria-label="Navigasi utama">
+          <Brand />
+          <div className="landing-nav-links">
+            <a href="#cara-kerja">Cara kerja</a>
+            <a href="#contoh">Lihat contoh</a>
           </div>
-        </div>
-      </nav>
+          <Link href="/sign-in" className="du-btn du-btn-neutral nav-signin">Masuk</Link>
+        </nav>
+      </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 md:py-28 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">Steto</h1>
-        <p className="text-xl md:text-2xl text-base-content/80 mb-8 max-w-2xl mx-auto">
-          Asisten rekam medis puskesmas: percakapan pemeriksaan jadi draf SOAP dan saran kode ICD-10.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="btn-primary">
-            Masuk
-          </Button>
-          <Button size="lg" variant="outline">
-            Daftar
-          </Button>
-        </div>
-      </section>
+      <main id="utama">
+        <section className="landing-hero landing-container" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <p className="hero-context">Asisten dokumentasi untuk puskesmas</p>
+            <h1 id="hero-title">Fokus ke pasien.<br />Catatannya,<br /><span>biar Steto.</span></h1>
+            <p className="hero-description">Percakapan konsultasi jadi awal catatan medis yang rapi. Tinjau drafnya, lengkapi pemeriksaan, lalu putuskan.</p>
+            <div className="hero-actions">
+              <Link href="/sign-in" className="du-btn du-btn-primary hero-primary">Masuk ke Steto</Link>
+              <a href="#contoh" className="du-btn du-btn-outline">Lihat contoh catatan</a>
+            </div>
+            <p className="hero-footnote">Dari percakapan ke draf. Tetap dengan tinjauan Anda.</p>
+          </div>
+          <LandingExample />
+        </section>
 
-      {/* Cara Kerja */}
-      <section id="cara-kerja" className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">Cara Kerja</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <div className="text-5xl mb-4">🎤</div>
-              <h3 className="text-xl font-bold mb-2">Rekam Percakapan</h3>
-              <p className="text-base-content/70">Dokter merekam percakapan konsultasi dengan pasien.</p>
+        <section className="workflow-section" id="cara-kerja" aria-labelledby="workflow-title">
+          <div className="landing-container workflow-grid">
+            <div className="workflow-intro">
+              <p className="section-context">Alur yang dirancang</p>
+              <h2 id="workflow-title">Satu kunjungan.<br />Catatan yang utuh.</h2>
+              <p>Pencatatan mengikuti pekerjaan di ruang periksa, dari persiapan pasien sampai tinjauan tenaga medis.</p>
+              <a href="#contoh" className="workflow-example-link">Lihat bentuk draf SOAP</a>
             </div>
+            <ol className="workflow-list">
+              {workflow.map((item) => (
+                <li key={item.number}>
+                  <span className="workflow-number" aria-hidden="true">{item.number}</span>
+                  <div><div className="workflow-row-heading"><h3>{item.title}</h3><span>{item.role}</span></div><p>{item.body}</p></div>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <div className="text-5xl mb-4">📝</div>
-              <h3 className="text-xl font-bold mb-2">AI Membuat SOAP</h3>
-              <p className="text-base-content/70">AI mentranskrip dan membuat draf SOAP serta saran ICD-10.</p>
-            </div>
-          </div>
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <div className="text-5xl mb-4">✅</div>
-              <h3 className="text-xl font-bold mb-2">Dokter Menyetujui</h3>
-              <p className="text-base-content/70">Dokter meninjau dan menyetujui dokumen untuk dikirim ke SATUSEHAT.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Fitur Utama */}
-      <section id="fitur" className="container mx-auto px-4 py-16 bg-base-200 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center mb-12">Fitur Utama</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex gap-4">
-            <div className="w-12 h-12 rounded-lg bg-primary text-primary-content flex items-center justify-center shrink-0">
-              📱
-            </div>
-            <div>
-              <h3 className="font-bold text-lg">Mobile Friendly</h3>
-              <p className="text-base-content/70 mt-1">Akses dari mana saja, kapan saja.</p>
-            </div>
+        <section className="closing-section landing-container" aria-labelledby="closing-title">
+          <div className="closing-note">
+            <div><h2 id="closing-title">Kenali Steto dari<br />ruang kerja Anda.</h2><p>Masuk dengan akun yang sudah terdaftar.</p></div>
+            <Link href="/sign-in" className="du-btn du-btn-neutral">Buka Steto</Link>
           </div>
-          <div className="flex gap-4">
-            <div className="w-12 h-12 rounded-lg bg-primary text-primary-content flex items-center justify-center shrink-0">
-              🤖
-            </div>
-            <div>
-              <h3 className="font-bold text-lg">AI Assistant</h3>
-              <p className="text-base-content/70 mt-1">Draf SOAP dan ICD-10 otomatis.</p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="w-12 h-12 rounded-lg bg-primary text-primary-content flex items-center justify-center shrink-0">
-              📤
-            </div>
-            <div>
-              <h3 className="font-bold text-lg">SATUSEHAT</h3>
-              <p className="text-base-content/70 mt-1">Integrasi dengan sistem kesehatan nasional.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* CTA */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h2 className="text-3xl font-bold mb-6">Siap Mencoba?</h2>
-        <p className="text-lg text-base-content/70 mb-8">Mulai menggunakan Steto hari ini untuk mempermudah pekerjaan Anda.</p>
-        <Button size="lg" className="btn-primary">
-          Mulai Sekarang
-        </Button>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-base-300 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-base-content/70">© 2026 Steto. Semua hak dilindungi.</p>
-        </div>
+      <footer className="landing-footer landing-container">
+        <Brand />
+        <p>Catatan medis, dimulai dari percakapan.</p>
+        <a href="#utama">Kembali ke atas</a>
       </footer>
     </div>
   );

@@ -1,4 +1,13 @@
 @import "tailwindcss";
+@import "./landing.css";
+
+@plugin "daisyui" {
+  themes: false;
+  root: ".steto-landing";
+  prefix: "du-";
+  include: button, card, badge, tab, navbar;
+  exclude: rootcolor, rootscrollgutter;
+}
 
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;

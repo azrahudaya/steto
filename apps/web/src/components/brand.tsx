@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export function Brand({ href = "/" }: { href?: string }) {
   return (
-    <Link href={href} className="inline-block">
-      <Image src="/logo.png" alt="Steto" width={48} height={48} className="w-12 h-12" />
+    <Link href={href} className="steto-brand" aria-label="Steto, beranda">
+      <Image src="/steto-wordmark.webp" alt="Steto" width={528} height={204} priority style={{ width: 116, height: "auto" }} />
     </Link>
   );
 }
