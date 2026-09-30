@@ -28,6 +28,7 @@
   --depth: 0;
   --noise: 0;
   --landing-muted: #62645c;
+  container: steto-page / inline-size;
   background: #fafaf7;
   color: var(--color-base-content);
   color-scheme: light;
@@ -181,5 +182,26 @@
   .steto-landing .workflow-row-heading > span { margin-top: 5px; }
   .steto-landing .hero-actions .du-btn { font-size: 13px; }
   .steto-landing .example-content { min-height: 358px; }
+}
+@container steto-page (max-width: 280px) {
+  .landing-container { width: calc(100% - 24px); }
+  .landing-header .du-navbar { flex-wrap: wrap; padding-block: 16px; gap: 12px; }
+  .steto-landing .nav-signin { margin-left: 0; }
+  .landing-hero, .workflow-grid { grid-template-columns: minmax(0,1fr); }
+  .hero-copy, .workflow-intro { min-width: 0; overflow-wrap: anywhere; }
+  .hero-copy h1 { font-size: 2rem; }
+  .hero-actions .du-btn { white-space: normal; width: 100%; }
+  .example-heading { flex-wrap: wrap; padding: 16px 12px; }
+  .steto-landing .example-tabs { gap: 0; padding-inline: 12px; flex-wrap: wrap; }
+  .steto-landing .example-tabs .du-tab { width: 100%; justify-content: flex-start; }
+  .example-content { padding: 18px 12px; min-height: 0; }
+  .soap-row { grid-template-columns: minmax(0,1fr); }
+  .example-note { flex-wrap: wrap; margin-inline: 8px; padding: 12px; }
+  .example-backing { transform: none; }
+  .workflow-list li { grid-template-columns: minmax(0,1fr); }
+  .closing-note { padding: 24px 16px; }
+  .closing-note h2 { font-size: 1.6rem; overflow-wrap: anywhere; }
+  .landing-footer { display: flex; flex-direction: column; align-items: flex-start; }
+  .landing-footer > a:last-child { margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .steto-landing * { scroll-behavior: auto; transition: none !important; } }
