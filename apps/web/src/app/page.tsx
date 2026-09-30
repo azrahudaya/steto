@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { LandingExample } from "@/components/landing-example";
+import "./landing.css";
 
 export const metadata: Metadata = {
   title: "Steto | Notes that start with the conversation",
