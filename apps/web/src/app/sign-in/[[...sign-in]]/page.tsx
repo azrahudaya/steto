@@ -1,0 +1,7 @@
+import { SignIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+
+export default function SignInPage() {
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) redirect("/");
+  return <main className="wrap app-content"><div className="app-panel"><SignIn /></div></main>;
+}

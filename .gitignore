@@ -1,0 +1,40 @@
+# env
+.env
+.env.*
+!.env.example
+
+# build dan dependensi
+node_modules/
+.next/
+out/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+coverage/
+
+# data lokal
+*.webm
+*.wav
+/models/
+/audio/
+
+# dokumen internal
+docs/
+STETO-PREP.md
+
+# file agent dan AI
+.hermes/
+.hermes*
+.claude/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.cursor/
+.cursorrules
+.windsurf/
+.aider*
+.continue/
+.codex/
+.github/copilot-instructions.md
+*.prompt.md
