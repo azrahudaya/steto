@@ -1,36 +1,77 @@
 # Steto
 
-Dokter fokus ke pasien, Steto yang mencatat. https://steto.tech
+Dokter fokus ke pasien, Steto yang mencatat.
 
-Fondasi web dan API sedang dibangun. Fitur klinis berikut belum tersedia:
+Steto adalah aplikasi dokumentasi medis untuk Puskesmas yang menggunakan AI untuk mentranskrip percakapan konsultasi dan menghasilkan draf SOAP secara otomatis.
 
-- Pendaftaran pasien dan kunjungan
-- Perekaman dan transkripsi percakapan
-- Draf SOAP dan saran ICD-10
-- Persetujuan dokter dan bundle FHIR R4
-- Adapter SATUSEHAT
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)
+![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=flat-square&logo=redis)
+![Clerk](https://img.shields.io/badge/Clerk-Auth-6C47FF?style=flat-square)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-Arsitektur: Next.js (web), FastAPI (api), RQ (worker), PostgreSQL, Redis, dan Caddy.
+## Fitur
 
-## Lokal
+- **Transkripsi Medis** — AI yang memahami terminologi medis Indonesia
+- **Draf SOAP Otomatis** — Subjektif, Objektif, Assessment, Plan dalam hitungan detik
+- **Saran ICD-10** — Rekomendasi kode diagnosis berdasarkan percakapan
+- **Integrasi SATUSEHAT** — Kirim ke Kemenkes dengan format FHIR standar
+- **Multi-Tenancy** — Satu aplikasi untuk seluruh Puskesmas di Indonesia
 
-Salin `.env.example` ke `.env`, isi `POSTGRES_PASSWORD` dan kunci Clerk development milik aplikasi sendiri. Jangan commit `.env`. Jalankan `docker compose up --build`. Periksa `http://localhost` dan `/api/health`. Tanpa kunci Clerk, landing bisa dibuka, tetapi login belum aktif.
+## Stack
 
-| Variabel | Kegunaan |
-| --- | --- |
-| `POSTGRES_PASSWORD` | Sandi PostgreSQL |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Kunci publik Clerk, dibutuhkan saat build web |
-| `CLERK_SECRET_KEY` | Kunci server Clerk |
-| `DATABASE_URL` | Koneksi database API |
-| `REDIS_URL` | Koneksi antrean |
-| `DEEPSEEK_API_KEY` | Disiapkan untuk fitur AI, belum dipakai |
-| `DEEPSEEK_BASE_URL`, `DEEPSEEK_MODEL` | Konfigurasi model, belum dipakai |
-| `WHISPER_MODEL`, `WHISPER_COMPUTE_TYPE` | Konfigurasi STT, belum dipakai |
-| `FHIR_TARGET`, `FHIR_BASE_URL` | Adapter FHIR, belum dipakai |
-| `SATUSEHAT_ORG_ID`, `SATUSEHAT_CLIENT_ID`, `SATUSEHAT_CLIENT_SECRET` | Integrasi resmi, belum dipakai |
+- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: FastAPI, SQLAlchemy, PostgreSQL, Redis, RQ
+- **Auth**: Clerk dengan organisasi multi-tenant
+- **Infra**: Docker, Caddy reverse proxy
 
-Rencana model: `Systran/faster-whisper-small` dari Hugging Face dan DeepSeek API. Daftar ICD-10 dari ICD-10-CM CDC akan ditambahkan bersama fitur klinis; belum ada `data/icd10.csv`.
+## Quick Start
 
-Data simulasi saja, bukan alat diagnosis. Integrasi SATUSEHAT menunggu kredensial resmi.
+```bash
+# Clone repository
+git clone https://github.com/azrahudaya/steto.git
+cd steto
 
-Lisensi MIT.
+# Copy environment
+cp .env.example .env
+
+# Start with Docker
+docker compose up -d
+
+# Open http://localhost:3100
+```
+
+## Development
+
+```bash
+# Web (Next.js)
+cd apps/web
+npm install
+npm run dev
+
+# API (FastAPI)
+cd apps/api
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## Environment Variables
+
+See `.env.example` for required variables:
+
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` — Clerk public key
+- `CLERK_SECRET_KEY` — Clerk secret key
+- `DATABASE_URL` — PostgreSQL connection
+- `REDIS_URL` — Redis connection
+
+## License
+
+MIT License — see [LICENSE](LICENSE)
+
+---
+
+Built by [azrahudaya](https://github.com/azrahudaya)

@@ -1,212 +1,184 @@
+import Image from "next/image";
 import Link from "next/link";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { 
+  Stethoscope, 
+  Mic, 
+  FileText, 
+  Shield, 
+  Users, 
+  Zap,
+  CheckCircle,
+  ArrowRight 
+} from "lucide-react";
 
-export default async function Home() {
-  const authReady = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-  
+export const dynamic = "force-dynamic";
+
+export default function Home() {
   return (
-    <div className="site-shell">
-      {/* Header */}
-      <header className="site-header">
-        <Link href="/" className="wordmark">
-          steto<span className="wordmark-stop">.</span>
-        </Link>
-        <nav className="header-actions">
-          {authReady ? (
-            <>
-              <SignInButton mode="redirect">
-                <Button variant="ghost">Masuk</Button>
-              </SignInButton>
-              <SignUpButton mode="redirect">
-                <Button>Mulai gratis</Button>
-              </SignUpButton>
-            </>
-          ) : (
-            <span className="text-sm text-muted-foreground">Konfigurasi diperlukan</span>
-          )}
-        </nav>
-      </header>
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo.png" alt="Steto" width={32} height={12} className="h-8 w-auto" />
+            <span className="text-xl font-semibold text-white">Steto</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <SignInButton mode="modal">
+              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10">
+                Masuk
+              </Button>
+            </SignInButton>
+            <SignInButton mode="modal">
+              <Button className="bg-white text-slate-900 hover:bg-slate-100">
+                Mulai Gratis
+              </Button>
+            </SignInButton>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-container">
-          <div>
-            <div className="hero-badge">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-              Catatan pemeriksaan puskesmas
-            </div>
-            <h1 className="hero-title">
-              Dokter fokus ke pasien,<br/><em>Steto yang mencatat.</em>
-            </h1>
-            <p className="hero-description">
-              Ubah percakapan pemeriksaan menjadi draf SOAP dan saran ICD-10 secara otomatis. 
-              Dokter tetap memeriksa, mengedit, dan menyetujui setiap catatan.
-            </p>
-            <div className="hero-actions">
-              {authReady && (
-                <SignUpButton mode="redirect">
-                  <Button size="lg">Coba gratis</Button>
-                </SignUpButton>
-              )}
-              <Button variant="outline" size="lg">
-                <a href="#cara-kerja">Lihat cara kerja</a>
-              </Button>
-            </div>
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm mb-8">
+            <Zap className="w-4 h-4" />
+            <span>Dokumentasi medis 10x lebih cepat</span>
           </div>
           
-          {/* Visual - Record Sheet */}
-          <div className="hidden lg:block">
-            <div style={{
-              background: '#ffffff',
-              border: '1px solid #e5e5e5',
-              borderRadius: '16px',
-              padding: '32px',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.06)'
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                paddingBottom: '24px',
-                borderBottom: '1px solid #e5e5e5',
-                marginBottom: '24px',
-                fontSize: '13px',
-                fontWeight: 600,
-                color: '#737373'
-              }}>
-                <span>Alur Kerja</span>
-                <span>3 Langkah</span>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            Dokter fokus ke pasien,
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              Steto yang mencatat
+            </span>
+          </h1>
+          
+          <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Rekam percakapan konsultasi, dapatkan draf SOAP dan saran kode ICD-10 
+            secara otomatis. Siap integrasi dengan SATUSEHAT.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <SignInButton mode="modal">
+              <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 h-12 text-base">
+                Coba Sekarang
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </SignInButton>
+            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 h-12">
+              Lihat Demo
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-20 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-white text-center mb-4">
+            Cara Kerja
+          </h2>
+          <p className="text-slate-400 text-center mb-12 max-w-xl mx-auto">
+            Tiga langkah sederhana untuk dokumentasi medis yang lebih efisien
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+                <Mic className="w-6 h-6 text-emerald-400" />
               </div>
-              
-              {[
-                { num: '01', title: 'Rekam percakapan', desc: 'Dengan persetujuan pasien, rekam dialog pemeriksaan.' },
-                { num: '02', title: 'Tinjau draf', desc: 'Periksa transkrip, SOAP, dan saran kode ICD-10.' },
-                { num: '03', title: 'Setujui catatan', desc: 'Dokter memegang keputusan akhir atas semua keluaran AI.' }
-              ].map((step, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  gap: '20px',
-                  padding: i < 2 ? '20px 0' : '20px 0 0',
-                  borderBottom: i < 2 ? '1px solid #e5e5e5' : 'none'
-                }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    background: i === 0 ? '#0066ff' : '#f5f5f5',
-                    color: i === 0 ? 'white' : '#737373',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '16px',
-                    flexShrink: 0
-                  }}>
-                    {step.num}
-                  </div>
-                  <div>
-                    <h3 style={{ fontWeight: 600, marginBottom: '6px', fontSize: '16px' }}>{step.title}</h3>
-                    <p style={{ color: '#525252', fontSize: '14px', lineHeight: 1.5 }}>{step.desc}</p>
-                  </div>
-                </div>
-              ))}
+              <h3 className="text-lg font-semibold text-white mb-2">1. Rekam</h3>
+              <p className="text-slate-400">
+                Tekan tombol rekam saat konsultasi dengan pasien. Steto mendengarkan dan mentranskrip percakapan.
+              </p>
+            </div>
+
+            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4">
+                <FileText className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">2. Tinjau</h3>
+              <p className="text-slate-400">
+                AI menghasilkan draf SOAP lengkap dengan saran kode ICD-10. Edit sesuai kebutuhan.
+              </p>
+            </div>
+
+            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-violet-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">3. Kirim</h3>
+              <p className="text-slate-400">
+                Simpan ke SATUSEHAT dengan satu klik. Tercatat rapi dan siap audit.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features-section">
-        <div className="features-grid">
-          {[
-            {
-              icon: '🎙️',
-              title: 'Rekam Percakapan',
-              desc: 'Dengan persetujuan pasien, rekam dialog pemeriksaan secara alami saat dokter berinteraksi.'
-            },
-            {
-              icon: '📝',
-              title: 'Draf SOAP Otomatis',
-              desc: 'AI menyusun draf catatan SOAP dari percakapan. Dokter tinggal review dan edit seperlunya.'
-            },
-            {
-              icon: '🔍',
-              title: 'Saran ICD-10',
-              desc: 'Sistem memberikan rekomendasi kode diagnosis berdasarkan temuan klinis yang tercatat.'
-            },
-            {
-              icon: '✅',
-              title: 'Kontrol Penuh',
-              desc: 'Setiap keluaran AI adalah draf. Dokter memegang keputusan akhir untuk disetujui atau diedit.'
-            },
-            {
-              icon: '🔗',
-              title: 'Siap SATUSEHAT',
-              desc: 'Catatan dapat dikirim ke SATUSEHAT dalam format FHIR setelah mendapat kredensial resmi.'
-            },
-            {
-              icon: '📱',
-              title: 'Akses Mudah',
-              desc: 'Antarmuka sederhana yang dapat diakses dari perangkat apapun di puskesmas.'
-            }
-          ].map((feature, i) => (
-            <div key={i} className="feature-card">
-              <div className="feature-icon">{feature.icon}</div>
-              <h3>{feature.title}</h3>
-              <p>{feature.desc}</p>
-            </div>
-          ))}
+      {/* Features */}
+      <section className="py-20 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-white text-center mb-12">
+            Fitur Utama
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { icon: Stethoscope, title: "Transkripsi Medis", desc: "AI yang memahami terminologi medis Indonesia" },
+              { icon: FileText, title: "Draf SOAP Otomatis", desc: "Subjektif, Objektif, Assessment, Plan dalam hitungan detik" },
+              { icon: CheckCircle, title: "Saran ICD-10", desc: "Rekomendasi kode diagnosis berdasarkan percakapan" },
+              { icon: Shield, title: "Integrasi SATUSEHAT", desc: "Kirim ke Kemenkes dengan format FHIR standar" },
+              { icon: Users, title: "Multi-Tenancy", desc: "Satu aplikasi untuk seluruh Puskesmas di Indonesia" },
+              { icon: Zap, title: "Real-time", desc: "Hasil transkrip muncul saat konsultasi berlangsung" },
+            ].map((f, i) => (
+              <div key={i} className="flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
+                  <f.icon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-white mb-1">{f.title}</h3>
+                  <p className="text-sm text-slate-400">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section style={{
-        padding: '80px 24px',
-        background: '#0066ff',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: '32px',
-            fontWeight: 700,
-            color: 'white',
-            marginBottom: '16px',
-            letterSpacing: '-0.02em'
-          }}>
-            Siap mencoba Steto?
+      {/* CTA */}
+      <section className="py-20 px-6 border-t border-white/5">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Siap memulai?
           </h2>
-          <p style={{
-            fontSize: '18px',
-            color: 'rgba(255,255,255,0.9)',
-            marginBottom: '32px'
-          }}>
-            Mulai gratis untuk puskesmas Anda. Tidak perlu kartu kredit.
+          <p className="text-slate-400 mb-8">
+            Daftar gratis dan mulai gunakan Steto di Puskesmas Anda hari ini.
           </p>
-          {authReady && (
-            <SignUpButton mode="redirect">
-              <Button size="lg" variant="secondary" style={{ 
-                background: 'white', 
-                color: '#0066ff',
-                fontWeight: 600
-              }}>
-                Daftar sekarang
-              </Button>
-            </SignUpButton>
-          )}
+          <SignInButton mode="modal">
+            <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 h-12">
+              Mulai Gratis
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </SignInButton>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="site-footer">
-        <div className="footer-container">
-          <div className="footer-brand">steto.</div>
-          <p style={{ fontSize: '14px' }}>
-            Data simulasi untuk demonstrasi. Bukan alat diagnosis medis.
-          </p>
+      <footer className="py-8 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Image src="/logo.png" alt="Steto" width={24} height={9} className="h-6 w-auto" />
+            <span className="text-slate-400 text-sm">© 2026 Steto</span>
+          </div>
+          <div className="flex gap-6 text-sm text-slate-400">
+            <Link href="/privasi" className="hover:text-white transition-colors">Privasi</Link>
+            <Link href="/ketentuan" className="hover:text-white transition-colors">Ketentuan</Link>
+            <Link href="https://github.com/azrahudaya/steto" className="hover:text-white transition-colors">GitHub</Link>
+          </div>
         </div>
       </footer>
     </div>
