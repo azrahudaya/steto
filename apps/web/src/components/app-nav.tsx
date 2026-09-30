@@ -2,38 +2,39 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Brand } from "@/components/brand";
 import { cn } from "@/lib/utils";
 
-export function AppNav({ admin, mobile = false }: { admin: boolean; mobile?: boolean }) {
+const LINKS = [
+  { href: "/app/pasien", label: "Patients" },
+  { href: "/app/organisasi", label: "Organization" },
+  { href: "/app/akun", label: "Account" },
+];
+
+export function AppNav({ sample }: { sample?: boolean }) {
   const pathname = usePathname();
-  const base = mobile ? "flex flex-col gap-2" : "flex items-center gap-2";
-
-  const links = [
-    { href: "/app/pasien", label: "Pasien" },
-    { href: "/app/organisasi", label: "Organisasi" },
-  ];
-
-  if (admin) {
-    links.push({ href: "/app/akun", label: "Akun" });
-  }
-
   return (
-    <nav className={base}>
-      <Link href="/" className="font-bold text-primary">
-        steto
-      </Link>
-      {links.map((l) => (
-        <Link
-          key={l.href}
-          href={l.href}
-          className={cn(
-            "px-3 py-2 rounded-md text-sm font-medium",
-            pathname === l.href ? "bg-primary text-primary-content" : "hover:bg-base-200",
-          )}
-        >
-          {l.label}
-        </Link>
-      ))}
+    <nav className="flex items-center gap-1">
+      <Brand size="sm" />
+      <div className="ml-2 flex items-center gap-1">
+        {LINKS.map((l) => {
+          const active = pathname === l.href || pathname.startsWith(l.href + "/");
+          return (
+            <Link
+              key={l.href}
+              href={l.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                active ? "bg-primary text-primary-content" : "hover:bg-base-200",
+              )}
+            >{l.label}</Link>
+          );
+        })}
+      </div>
+      {sample && (
+        <span className="badge badge-outline badge-sm ml-2 text-base-content/60">Sample data</span>
+      )}
     </nav>
   );
 }

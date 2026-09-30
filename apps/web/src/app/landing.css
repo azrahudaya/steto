@@ -1,32 +1,4 @@
 .steto-landing {
-  --color-base-100: #ffffff;
-  --color-base-200: #f6f5f1;
-  --color-base-300: #deddd5;
-  --color-base-content: #252621;
-  --color-primary: #efb73f;
-  --color-primary-content: #252621;
-  --color-secondary: #eeece4;
-  --color-secondary-content: #252621;
-  --color-accent: #efb73f;
-  --color-accent-content: #252621;
-  --color-neutral: #252621;
-  --color-neutral-content: #ffffff;
-  --color-info: #e8edf0;
-  --color-info-content: #263944;
-  --color-success: #e8efe7;
-  --color-success-content: #2c482e;
-  --color-warning: #fff3d2;
-  --color-warning-content: #5d4615;
-  --color-error: #faeae6;
-  --color-error-content: #842d24;
-  --radius-selector: 0.375rem;
-  --radius-field: 0.5rem;
-  --radius-box: 1rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
   --landing-muted: #62645c;
   container: steto-page / inline-size;
   background: #fafaf7;
@@ -41,16 +13,16 @@
 .steto-landing [id] { scroll-margin-top: 28px; }
 .landing-container { width: min(1184px, calc(100% - 80px)); margin-inline: auto; }
 .landing-header { border-bottom: 1px solid #e5e5dd; background: #fafaf7; }
-.landing-header .du-navbar { min-height: 100px; padding: 0; gap: 28px; }
+.landing-header .navbar { min-height: 100px; padding: 0; gap: 28px; }
 .steto-landing .steto-brand { display: inline-flex; align-items: center; min-height: 48px; flex-shrink: 0; }
 .landing-nav-links { display: flex; gap: 30px; margin-left: auto; }
 .landing-nav-links a, .landing-footer > a { display: inline-flex; align-items: center; min-height: 44px; color: #41433c; font-size: 14px; font-weight: 500; }
 .landing-nav-links a:hover, .landing-footer > a:hover { text-decoration: underline; text-underline-offset: 5px; }
-.steto-landing .du-btn { min-height: 48px; height: auto; padding: 12px 22px; font-size: 14px; font-weight: 600; line-height: 1.4; border-radius: 7px; box-shadow: none; }
-.steto-landing .du-btn-outline { border-color: #73756b; background: transparent; color: #252621; }
-.steto-landing .du-btn-outline:hover { background: #eeeee7; }
-.steto-landing .du-btn-primary { border-color: #8b650c; }
-.steto-landing .du-btn-primary:hover { background: #dfa52c; }
+.steto-landing .btn { min-height: 48px; height: auto; padding: 12px 22px; font-size: 14px; font-weight: 600; line-height: 1.4; box-shadow: none; }
+.steto-landing .btn-outline { border-color: #73756b; background: transparent; color: #252621; }
+.steto-landing .btn-outline:hover { background: #eeeee7; }
+.steto-landing .btn-primary { border-color: #8b650c; }
+.steto-landing .btn-primary:hover { background: #dfa52c; }
 .steto-landing .nav-signin { min-height: 44px; padding-inline: 24px; }
 .landing-skip { position: absolute; top: -100px; left: 16px; z-index: 10; padding: 14px; background: #fff; color: #252621; }
 .landing-skip:focus { top: 12px; }
@@ -62,15 +34,15 @@
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero-footnote { color: #62645c; font-size: 12px; line-height: 1.7; margin-top: 21px; }
 .example-stage { position: relative; padding: 14px 12px 0 0; min-width: 0; }
-.example-backing { position: absolute; inset: 0 0 52px 25px; background: #efb73f; border-radius: 14px; transform: rotate(3deg); }
-.steto-landing .example-sheet { position: relative; display: block; background: #fff; border: 1px solid #dadbd3; border-radius: 12px; box-shadow: 0 16px 44px -24px #38372455; }
+.example-backing { position: absolute; inset: 0 0 52px 25px; background: var(--color-primary); border-radius: 14px; transform: rotate(3deg); }
+.steto-landing .example-sheet { position: relative; display: block; background: var(--color-base-100); border: 1px solid #dadbd3; border-radius: 12px; box-shadow: 0 16px 44px -24px #38372455; }
 .example-heading { padding: 26px 28px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .document-context { font-size: 12px; color: #62645c; margin: 0 0 5px; }
 .example-heading h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.025em; }
 .steto-landing .example-label { border-radius: 4px; padding: 5px 8px; height: auto; font-size: 11px; color: #62645c; border-color: #77796f; font-weight: 500; }
 .steto-landing .example-tabs { display: flex; border-bottom: 1px solid #e5e5dd; padding: 0 28px; gap: 24px; }
-.steto-landing .example-tabs .du-tab { padding: 10px 0; min-height: 46px; height: auto; font-size: 13px; color: #62645c; }
-.steto-landing .example-tabs .du-tab-active { color: #252621; font-weight: 600; }
+.steto-landing .example-tabs .tab { padding: 10px 0; min-height: 46px; height: auto; font-size: 13px; color: #62645c; }
+.steto-landing .example-tabs .tab-active { color: #252621; font-weight: 600; }
 .example-content { min-height: 332px; padding: 22px 28px; }
 .example-content[hidden] { display: none; }
 .soap-row { display: grid; grid-template-columns: 26px minmax(0,1fr); gap: 13px; padding: 12px 0; border-bottom: 1px solid #edeee7; }
@@ -102,12 +74,12 @@
 .workflow-number { font-size: 12px; color: #62645c; font-family: var(--font-geist-mono), monospace; padding-top: 4px; }
 .workflow-row-heading { display: flex; gap: 16px; align-items: baseline; justify-content: space-between; }
 .workflow-row-heading h3 { font-size: 16px; letter-spacing: -0.025em; font-weight: 600; }
-.workflow-row-heading > span { color: #62645c; font-size: 10px; white-space: nowrap; }
+.workflow-row-heading > span { color: #62645c; font-size: 12px; white-space: nowrap; }
 .workflow-list li p { color: #62645c; font-size: 13px; line-height: 1.8; margin-top: 8px; max-width: 370px; }
 .closing-section { padding-block: 68px; }
 .closing-note { padding: 44px 52px; background: #f5e5b8; display: flex; justify-content: space-between; align-items: center; gap: 32px; border-radius: 12px; }
 .closing-note p { color: #555342; font-size: 14px; margin-top: 16px; }
-.closing-note .du-btn { flex-shrink: 0; }
+.closing-note .btn { flex-shrink: 0; }
 .landing-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 30px; padding-block: 6px 36px; }
 .landing-footer .steto-brand img { width: 95px !important; }
 .landing-footer p { color: #62645c; font-size: 12px; }
@@ -118,7 +90,7 @@
   .landing-hero { gap: 34px; padding-block: 65px; }
   .hero-copy h1 { font-size: clamp(3rem, 5.4vw, 3.8rem); }
   .hero-description { font-size: 15px; }
-  .hero-actions .du-btn { padding-inline: 15px; font-size: 13px; }
+  .hero-actions .btn { padding-inline: 15px; font-size: 13px; }
   .workflow-grid { gap: 55px; }
   .workflow-row-heading { display: block; }
   .workflow-row-heading > span { display: inline-block; margin-top: 5px; }
@@ -139,7 +111,7 @@
 }
 @media (max-width: 560px) {
   .landing-container { width: calc(100% - 40px); }
-  .landing-header .du-navbar { min-height: 84px; gap: 16px; }
+  .landing-header .navbar { min-height: 84px; gap: 16px; }
   .landing-nav-links { display: none; }
   .nav-signin { margin-left: auto; }
   .landing-hero { padding-block: 46px 52px; gap: 38px; }
@@ -147,13 +119,13 @@
   .hero-copy h1 { font-size: clamp(2.8rem, 10.9vw, 3.7rem); }
   .hero-description { font-size: 15px; margin-block: 22px 24px; line-height: 1.8; }
   .hero-actions { gap: 10px; }
-  .hero-actions .du-btn { min-height: 48px; padding: 13px 15px; font-size: 12px; }
-  .hero-footnote { max-width: 265px; font-size: 11px; margin-top: 16px; }
+  .hero-actions .btn { min-height: 48px; padding: 13px 15px; font-size: 13px; }
+  .hero-footnote { max-width: 265px; font-size: 12px; margin-top: 16px; }
   .example-stage { padding-right: 8px; }
   .example-heading { padding: 22px 18px 14px; }
   .example-heading h2 { font-size: 16px; }
   .steto-landing .example-tabs { padding-inline: 18px; }
-  .example-content { padding: 20px 18px; min-height: 350px; }
+  .example-content { padding: 20px 18px; min-height: 358px; }
   .example-note { margin-inline: 14px; }
   .soap-row { gap: 10px; }
   .workflow-section { padding-block: 48px; }
@@ -162,7 +134,7 @@
   .workflow-list li:last-child { padding-bottom: 0; }
   .workflow-row-heading { display: flex; gap: 12px; }
   .workflow-row-heading h3 { font-size: 15px; }
-  .workflow-row-heading > span { font-size: 9px; }
+  .workflow-row-heading > span { font-size: 12px; }
   .closing-section { padding-block: 40px; }
   .closing-note { padding: 28px 24px; flex-direction: column; align-items: flex-start; gap: 24px; }
   .closing-note h2 { font-size: 1.85rem; }
@@ -171,29 +143,17 @@
   .landing-footer p { grid-column: 1 / -1; grid-row: 2; font-size: 11px; }
   .landing-footer > a:last-child { grid-column: 2; grid-row: 1; }
 }
-.steto-landing .source-label,
-.steto-landing .example-note p,
-.steto-landing .example-caption,
-.steto-landing .hero-footnote,
-.steto-landing .landing-footer p { font-size: 12px; }
-.steto-landing .workflow-row-heading > span { font-size: 12px; }
-@media (max-width: 560px) {
-  .steto-landing .workflow-row-heading { display: block; }
-  .steto-landing .workflow-row-heading > span { margin-top: 5px; }
-  .steto-landing .hero-actions .du-btn { font-size: 13px; }
-  .steto-landing .example-content { min-height: 358px; }
-}
 @container steto-page (max-width: 280px) {
   .landing-container { width: calc(100% - 24px); }
-  .landing-header .du-navbar { flex-wrap: wrap; padding-block: 16px; gap: 12px; }
+  .landing-header .navbar { flex-wrap: wrap; padding-block: 16px; gap: 12px; }
   .steto-landing .nav-signin { margin-left: 0; }
   .landing-hero, .workflow-grid { grid-template-columns: minmax(0,1fr); }
   .hero-copy, .workflow-intro { min-width: 0; overflow-wrap: anywhere; }
   .hero-copy h1 { font-size: 2rem; }
-  .hero-actions .du-btn { white-space: normal; width: 100%; }
+  .hero-actions .btn { white-space: normal; width: 100%; }
   .example-heading { flex-wrap: wrap; padding: 16px 12px; }
   .steto-landing .example-tabs { gap: 0; padding-inline: 12px; flex-wrap: wrap; }
-  .steto-landing .example-tabs .du-tab { width: 100%; justify-content: flex-start; }
+  .steto-landing .example-tabs .tab { width: 100%; justify-content: flex-start; }
   .example-content { padding: 18px 12px; min-height: 0; }
   .soap-row { grid-template-columns: minmax(0,1fr); }
   .example-note { flex-wrap: wrap; margin-inline: 8px; padding: 12px; }

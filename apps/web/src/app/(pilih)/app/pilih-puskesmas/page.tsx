@@ -1,42 +1,35 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
+import { OrganizationList } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { Brand } from "@/components/brand";
 
-export default function PilihPuskesmasPage() {
+export default async function PilihPuskesmasPage() {
+  const { userId } = await auth();
+  if (!userId) redirect("/sign-in");
+
   return (
-    <div className="min-h-dvh bg-base-200 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-base-100 rounded-xl shadow-lg p-6">
-        <div className="flex flex-col items-center mb-6">
-          <h1 className="text-2xl font-bold mb-2">Pilih Puskesmas</h1>
-          <p className="text-base-content/70 text-center">Pilih organisasi untuk masuk</p>
+    <div className="flex min-h-dvh items-center justify-center bg-base-200 p-4">
+      <div className="card w-full max-w-md bg-base-100 shadow-xl">
+        <div className="card-body items-center text-center">
+          <Brand size="sm" />
+          <h1 className="mt-4 text-2xl font-bold">Choose an organization</h1>
+          <p className="text-base-content/70">Pick the clinic you work at, or create a new one.</p>
         </div>
-
-        <div className="card bg-base-200 shadow mb-4">
-          <div className="card-body">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
-                🏥
-              </div>
-              <div>
-                <p className="font-medium">Puskesmas Demo Steto</p>
-                <p className="text-sm text-base-content/60">Organisasi demo</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-base-content/60">
-            Belum punya organisasi?{" "}
-            <Link href="/app/organisasi" className="link link-primary">
-              Buat organisasi baru
-            </Link>
-          </p>
-        </div>
-
-        <div className="mt-6 text-center">
-          <Button size="lg" className="w-full">
-            Masuk dengan Akun Demo
-          </Button>
+        <div className="card-body pt-0">
+          <OrganizationList
+            afterSelectOrganizationUrl="/app/pasien"
+            afterCreateOrganizationUrl="/app/pasien"
+            appearance={{
+              elements: {
+                rootBox: "w-full",
+                organizationPreview: "card card-border bg-base-100 hover:bg-base-200",
+                previewButton: "flex w-full items-center gap-3 p-3",
+                previewText: "font-medium",
+                previewAvatar: "w-10 h-10",
+                createOrganizationButton: "btn btn-outline w-full",
+              },
+            }}
+          />
         </div>
       </div>
     </div>

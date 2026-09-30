@@ -9,14 +9,14 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://steto.tech"),
-  title: { default: "Steto", template: "%s · Steto" },
-  description: "Asisten rekam medis puskesmas: percakapan pemeriksaan jadi draf SOAP dan saran kode ICD-10.",
+  title: { default: "Steto | Notes that start with the conversation", template: "%s · Steto" },
+  description: "See how Steto turns a clinic conversation into a draft medical note. Read the example, then sign in to your account.",
   openGraph: {
-    title: "Steto",
-    description: "Dokter fokus ke pasien, Steto yang mencatat.",
+    title: "Steto | Notes that start with the conversation",
+    description: "See how Steto turns a clinic conversation into a draft medical note. Read the example, then sign in to your account.",
     url: "https://steto.tech",
     siteName: "Steto",
-    locale: "id_ID",
+    locale: "en_US",
     type: "website",
   },
 };
@@ -24,13 +24,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
   return (
-    <html lang="id" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-dvh font-sans">
-        {key ? (
-          <ClerkProvider localization={idID}>{children}</ClerkProvider>
-        ) : (
-          children
-        )}
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+      <body className="min-h-dvh bg-base-100 font-sans text-base-content antialiased">
+        {key ? <ClerkProvider localization={idID}>{children}</ClerkProvider> : children}
       </body>
     </html>
   );

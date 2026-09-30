@@ -1,5 +1,5 @@
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app-nav";
 
@@ -9,20 +9,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-dvh bg-base-200">
-      <header className="bg-base-100 border-b">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <AppNav admin={false} />
-          <div className="flex items-center gap-4">
-            <OrganizationSwitcher
-              appearance={{
-                elements: { organizationPreview: "bg-primary text-primary-content" },
-              }}
-            />
+      <header className="border-b border-base-300 bg-base-100">
+        <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+          <AppNav sample />
+          <div className="flex items-center gap-2">
+            <OrganizationSwitcher hidePersonal afterSelectOrganizationUrl="/app/pasien" afterCreateOrganizationUrl="/app/pasien" />
             <UserButton />
           </div>
         </div>
       </header>
-      <main className="container mx-auto py-6">{children}</main>
+      <main className="container mx-auto px-4 py-6">{children}</main>
     </div>
   );
 }

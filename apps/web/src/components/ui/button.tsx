@@ -1,38 +1,31 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { type ButtonHTMLAttributes, forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+type Variant = "primary" | "secondary" | "outline" | "ghost" | "neutral" | "error";
+type Size = "default" | "sm" | "lg" | "wide";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost";
-  size?: "sm" | "default" | "lg";
+  variant?: Variant;
+  size?: Size;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "primary", size = "default", ...props }, ref) => {
-    const variants = {
-      primary: "btn-primary text-primary-content",
-      secondary: "btn-secondary text-secondary-content",
-      outline: "btn-outline",
-      ghost: "btn-ghost hover:bg-base-200",
-    };
+const VARIANT: Record<Variant, string> = {
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  outline: "btn-outline",
+  ghost: "btn-ghost",
+  neutral: "btn-neutral",
+  error: "btn-error",
+};
 
-    const sizes = {
-      sm: "btn-sm",
-      default: "",
-      lg: "btn-lg",
-    };
+const SIZE: Record<Size, string> = {
+  default: "",
+  sm: "btn-sm",
+  lg: "btn-lg",
+  wide: "btn-wide",
+};
 
-    return (
-      <button
-        ref={ref}
-        className={cn("btn", variants[variant], sizes[size], className)}
-        {...props}
-      />
-    );
-  },
-);
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant = "primary", size = "default", type = "button", ...props }, ref) => (
+  <button ref={ref} type={type} className={cn("btn", VARIANT[variant], SIZE[size], className)} {...props} />
+));
 Button.displayName = "Button";

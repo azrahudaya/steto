@@ -17,16 +17,16 @@ const workflow = [
 
 export default function Home() {
   return (
-    <div className="steto-landing" data-theme="steto">
+    <div className="steto-landing">
       <a className="landing-skip" href="#main">Skip navigation</a>
       <header className="landing-header">
-        <nav className="du-navbar landing-container" aria-label="Main navigation">
+        <nav className="navbar landing-container" aria-label="Main navigation">
           <Brand />
           <div className="landing-nav-links">
             <a href="#how-it-works">How it works</a>
             <a href="#example">See an example</a>
           </div>
-          <Link href="/sign-in" className="du-btn du-btn-neutral nav-signin">Sign in</Link>
+          <Link href="/sign-in" className="btn btn-neutral nav-signin">Sign in</Link>
         </nav>
       </header>
 
@@ -37,8 +37,8 @@ export default function Home() {
             <h1 id="hero-title">Focus on the patient.<br />Let Steto<br /><span>handle the notes.</span></h1>
             <p className="hero-description">Turn a clinic conversation into a clean medical record. Read the draft, finish the exam, sign off.</p>
             <div className="hero-actions">
-              <Link href="/sign-in" className="du-btn du-btn-primary hero-primary">Sign in to Steto</Link>
-              <a href="#example" className="du-btn du-btn-outline">See a sample note</a>
+              <Link href="/sign-in" className="btn btn-primary hero-primary">Sign in to Steto</Link>
+              <a href="#example" className="btn btn-outline">See a sample note</a>
             </div>
             <p className="hero-footnote">From conversation to draft. You control the final note.</p>
           </div>
@@ -67,13 +67,13 @@ export default function Home() {
         <section className="closing-section landing-container" aria-labelledby="closing-title">
           <div className="closing-note">
             <div><h2 id="closing-title">Open Steto<br />where you work.</h2><p>Sign in with your existing account.</p></div>
-            <Link href="/sign-in" className="du-btn du-btn-neutral">Open Steto</Link>
+            <Link href="/sign-in" className="btn btn-neutral">Open Steto</Link>
           </div>
         </section>
       </main>
 
-      <footer className="landing-footer landing-container">
-        <Brand />
+      <footer className="landing-footer landing-container" aria-label="Footer">
+        <Brand size="sm" />
         <p>Notes that start with the conversation.</p>
         <a href="#main">Back to top</a>
       </footer>
