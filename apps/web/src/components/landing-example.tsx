@@ -27,7 +27,7 @@ export function LandingExample() {
           <div><p className="document-context">Consult room</p><h2>Visit note</h2></div>
           <span className="du-badge du-badge-outline example-label">Sample</span>
         </div>
-        <div className="du-tabs du-tabs-border example-tabs" role="tablist" aria-label="View sample">
+        <div className="tabs tabs-border example-tabs" role="tablist" aria-label="View sample">
           {labels.map((label, index) => (
             <button
               key={label}
@@ -38,7 +38,7 @@ export function LandingExample() {
               aria-selected={active === index}
               aria-controls={`example-panel-${index}`}
               tabIndex={active === index ? 0 : -1}
-              className={`du-tab ${active === index ? "du-tab-active" : ""}`}
+              className={`tab ${active === index ? "tab-active" : ""}`}
               onClick={() => setActive(index)}
               onKeyDown={(event) => navigate(event, index)}
             >{label}</button>
