@@ -41,7 +41,7 @@
 .example-heading h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.025em; }
 .steto-landing .example-label { border-radius: 4px; padding: 5px 8px; height: auto; font-size: 11px; color: #62645c; border-color: #77796f; font-weight: 500; }
 .steto-landing .example-tabs { display: flex; border-bottom: 1px solid #e5e5dd; padding: 0 28px; gap: 24px; }
-.steto-landing .example-tabs .tab { padding: 10px 0; min-height: 46px; height: 46px; font-size: 13px; color: #62645c; align-self: stretch; }
+.steto-landing .example-tabs .tab { padding: 10px 0; min-height: 46px; height: 46px; font-size: 13px; color: #62645c; align-self: stretch; display: inline-flex !important; align-items: center; }
 .steto-landing .example-tabs .tab-active { color: #252621; font-weight: 600; }
 .example-content { min-height: 332px; padding: 22px 28px; }
 .example-content[hidden] { display: none; }
