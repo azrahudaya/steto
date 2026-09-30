@@ -1,8 +1,10 @@
-export function Brand({ href = "/", className = "h-8" }: { href?: string; className?: string }) {
+import Image from "next/image";
+import Link from "next/link";
+
+export function Brand({ href = "/" }: { href?: string }) {
   return (
-    <a href={href} className="flex items-center gap-2">
-      <img src="/logo.png" alt="Steto" className={className} />
-      <span className="font-bold text-lg hidden sm:block">steto</span>
-    </a>
+    <Link href={href} className="inline-block">
+      <Image src="/logo.png" alt="Steto" width={48} height={48} className="w-12 h-12" />
+    </Link>
   );
 }
