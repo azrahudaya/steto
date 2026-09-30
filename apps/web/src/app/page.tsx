@@ -35,12 +35,12 @@ export default function Home() {
           <div className="hero-copy">
             <p className="hero-context">Documentation help for community clinics</p>
             <h1 id="hero-title">Focus on the patient.<br />Let Steto<br /><span>handle the notes.</span></h1>
-            <p className="hero-description">A clinic conversation becomes the start of a clean medical record. Read the draft, finish the exam, then sign off.</p>
+            <p className="hero-description">Turn a clinic conversation into a clean medical record. Read the draft, finish the exam, sign off.</p>
             <div className="hero-actions">
               <Link href="/sign-in" className="du-btn du-btn-primary hero-primary">Sign in to Steto</Link>
               <a href="#example" className="du-btn du-btn-outline">See a sample note</a>
             </div>
-            <p className="hero-footnote">From conversation to draft. Your review stays yours.</p>
+            <p className="hero-footnote">From conversation to draft. You control the final note.</p>
           </div>
           <LandingExample />
         </section>
@@ -50,7 +50,7 @@ export default function Home() {
             <div className="workflow-intro">
               <p className="section-context">The shape of one visit</p>
               <h2 id="workflow-title">One visit.<br />One complete record.</h2>
-              <p>Documentation follows the work in the exam room, from patient setup to clinician sign-off.</p>
+              <p>Documentation follows the exam room, from patient setup to clinician sign-off.</p>
               <a href="#example" className="workflow-example-link">See the SOAP draft</a>
             </div>
             <ol className="workflow-list">
@@ -74,7 +74,7 @@ export default function Home() {
 
       <footer className="landing-footer landing-container">
         <Brand />
-        <p>Medical notes, starting with the conversation.</p>
+        <p>Notes that start with the conversation.</p>
         <a href="#main">Back to top</a>
       </footer>
     </div>

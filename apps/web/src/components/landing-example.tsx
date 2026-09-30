@@ -2,7 +2,7 @@
 
 import { useRef, useState, type KeyboardEvent } from "react";
 
-const labels = ["Percakapan", "Draf SOAP"];
+const labels = ["Conversation", "SOAP draft"];
 
 export function LandingExample() {
   const [active, setActive] = useState(1);
