@@ -1,184 +1,195 @@
-import Image from "next/image";
 import Link from "next/link";
-import { SignInButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { 
-  Stethoscope, 
-  Mic, 
-  FileText, 
-  Shield, 
-  Users, 
-  Zap,
-  CheckCircle,
-  ArrowRight 
-} from "lucide-react";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { Brand } from "@/components/brand";
+import { Button, buttonVariants } from "@/components/ui/button";
 
+// Clerk <Show> reads the session on the server, so this page renders per request.
 export const dynamic = "force-dynamic";
+
+const authReady = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+function Masuk({ label = "Masuk", size = "default" }: { label?: string; size?: "default" | "lg" }) {
+  if (!authReady) {
+    return (
+      <Link href="/sign-in" className={buttonVariants({ size })}>
+        {label}
+      </Link>
+    );
+  }
+  return (
+    <>
+      <Show when="signed-out">
+        <SignInButton>
+          <Button size={size}>{label}</Button>
+        </SignInButton>
+      </Show>
+      <Show when="signed-in">
+        <Link href="/app/pasien" className={buttonVariants({ size })}>
+          Buka aplikasi
+        </Link>
+      </Show>
+    </>
+  );
+}
+
+const LANGKAH = [
+  { judul: "Rekam", isi: "Setelah pasien setuju, tekan rekam dan periksa seperti biasa." },
+  {
+    judul: "Tinjau",
+    isi: "Transkrip di kiri, draf SOAP di kanan. Klik kalimat untuk melihat sumbernya. Kalimat tanpa sumber ditandai kuning.",
+  },
+  {
+    judul: "Setujui",
+    isi: "Pilih kode ICD-10 dari tiga saran atau cari manual. Setelah disetujui, Steto menyusun bundle FHIR R4 untuk SATUSEHAT.",
+  },
+];
+
+const PERAN = [
+  { peran: "Perawat", isi: "Mencatat pasien dan mengisi tanda vital." },
+  { peran: "Dokter", isi: "Merekam pemeriksaan, meninjau draf, memilih ICD-10, lalu menyetujui." },
+  { peran: "Bidan", isi: "Sama dengan dokter. Bagian asesmen berisi diagnosis kebidanan." },
+  { peran: "Rekam medis", isi: "Memeriksa bundle yang siap dikirim ke SATUSEHAT." },
+  { peran: "Admin", isi: "Mengundang anggota dan mengatur peran staf." },
+];
+
+// A static copy of the review screen, so the hero shows the real interaction instead of a mockup frame.
+function ContohTinjauan() {
+  return (
+    <figure className="rounded-2xl border bg-card p-2 shadow-[0_1px_2px_rgba(28,27,26,0.04),0_16px_40px_-16px_rgba(28,27,26,0.22)]">
+      <div className="grid gap-2 sm:grid-cols-2">
+        <div className="rounded-xl bg-muted/70 p-4">
+          <p className="text-xs font-medium text-muted-foreground">Transkrip</p>
+          <ol className="mt-3 space-y-2 text-sm leading-relaxed">
+            <li>
+              <span className="block text-xs text-muted-foreground">Dokter</span>
+              Ada demam?
+            </li>
+            <li className="-mx-2 rounded-lg bg-brand/40 px-2 py-1">
+              <span className="block text-xs text-muted-foreground">Pasien</span>
+              Kalau malam agak panas. Tenggorokan juga sakit waktu menelan.
+            </li>
+          </ol>
+        </div>
+        <div className="rounded-xl p-4 ring-1 ring-border">
+          <p className="text-xs font-medium text-muted-foreground">SOAP, Subjektif</p>
+          <ul className="mt-3 space-y-2 text-sm leading-relaxed">
+            <li>Batuk berdahak putih sejak 3 hari.</li>
+            <li className="-mx-2 rounded-lg bg-brand/40 px-2 py-1 ring-1 ring-foreground/30">
+              Demam pada malam hari dan nyeri saat menelan.
+            </li>
+          </ul>
+          <p className="mt-4 text-xs font-medium text-muted-foreground">Rencana</p>
+          <p className="-mx-2 mt-2 rounded-lg bg-warn px-2 py-1 text-sm text-warn-foreground">
+            Parasetamol 500 mg bila demam.
+            <span className="block text-xs font-medium">Tanpa rujukan di transkrip</span>
+          </p>
+        </div>
+      </div>
+      <figcaption className="px-3 pb-1.5 pt-3 text-xs text-muted-foreground">
+        Contoh layar tinjauan. Kalimat terpilih menyorot sumbernya di transkrip.
+      </figcaption>
+    </figure>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Steto" width={32} height={12} className="h-8 w-auto" />
-            <span className="text-xl font-semibold text-white">Steto</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <SignInButton mode="modal">
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10">
-                Masuk
-              </Button>
-            </SignInButton>
-            <SignInButton mode="modal">
-              <Button className="bg-white text-slate-900 hover:bg-slate-100">
-                Mulai Gratis
-              </Button>
-            </SignInButton>
-          </div>
+    <div className="min-h-dvh">
+      <header className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <Brand className="h-8" />
+        <div className="flex items-center gap-3">
+          <Masuk />
+          {authReady && (
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+          )}
         </div>
-      </nav>
+      </header>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm mb-8">
-            <Zap className="w-4 h-4" />
-            <span>Dokumentasi medis 10x lebih cepat</span>
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Dokter fokus ke pasien,
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Steto yang mencatat
-            </span>
-          </h1>
-          
-          <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Rekam percakapan konsultasi, dapatkan draf SOAP dan saran kode ICD-10 
-            secara otomatis. Siap integrasi dengan SATUSEHAT.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <SignInButton mode="modal">
-              <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 h-12 text-base">
-                Coba Sekarang
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </SignInButton>
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 h-12">
-              Lihat Demo
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-4">
-            Cara Kerja
-          </h2>
-          <p className="text-slate-400 text-center mb-12 max-w-xl mx-auto">
-            Tiga langkah sederhana untuk dokumentasi medis yang lebih efisien
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
-                <Mic className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">1. Rekam</h3>
-              <p className="text-slate-400">
-                Tekan tombol rekam saat konsultasi dengan pasien. Steto mendengarkan dan mentranskrip percakapan.
-              </p>
+      <main>
+        <section className="mx-auto grid max-w-6xl gap-12 px-4 pb-20 pt-10 sm:px-6 md:pt-16 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center lg:gap-16 lg:pb-28 lg:pt-20">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">Asisten rekam medis untuk puskesmas</p>
+            <h1 className="mt-4 text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+              Dokter fokus ke pasien, <span className="marker">Steto yang mencatat.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-pretty text-lg text-muted-foreground">
+              Rekam percakapan pemeriksaan. Steto menyusun draf SOAP dan saran kode ICD-10. Dokter memeriksa, mengedit,
+              lalu menyetujui.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Masuk label="Masuk ke Steto" size="lg" />
+              <Link href="#cara-kerja" className={buttonVariants({ variant: "outline", size: "lg" })}>
+                Lihat cara kerja
+              </Link>
             </div>
+          </div>
+          <ContohTinjauan />
+        </section>
 
-            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4">
-                <FileText className="w-6 h-6 text-cyan-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">2. Tinjau</h3>
-              <p className="text-slate-400">
-                AI menghasilkan draf SOAP lengkap dengan saran kode ICD-10. Edit sesuai kebutuhan.
+        <section className="border-t">
+          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:py-24">
+            <h2 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
+              Catatan medis ditulis sambil melayani antrean
+            </h2>
+            <div className="space-y-4 text-lg text-muted-foreground">
+              <p>
+                Di poli umum, dokter mengetik SOAP di sela pemeriksaan. Waktu mengetik diambil dari waktu bicara dengan
+                pasien, dan catatan yang ditulis terburu-buru mudah tidak lengkap.
               </p>
-            </div>
-
-            <div className="relative p-6 rounded-2xl bg-slate-800/50 border border-white/5 hover:border-emerald-500/30 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center mb-4">
-                <Shield className="w-6 h-6 text-violet-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">3. Kirim</h3>
-              <p className="text-slate-400">
-                Simpan ke SATUSEHAT dengan satu klik. Tercatat rapi dan siap audit.
+              <p>
+                Steto memindahkan kerja menulis ke tahap tinjau. Keputusan tetap di dokter: setiap kalimat bisa dicek ke
+                transkrip, diedit, lalu disetujui.
               </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features */}
-      <section className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">
-            Fitur Utama
-          </h2>
+        {/* Three steps because the doctor's part of the flow really is record, review, approve. */}
+        <section id="cara-kerja" className="scroll-mt-4 border-t bg-card">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Cara kerja</h2>
+            <ol className="mt-10 grid gap-10 md:grid-cols-3 md:gap-8">
+              {LANGKAH.map((l, i) => (
+                <li key={l.judul} className="border-t border-foreground pt-5">
+                  <span className="font-mono text-sm tabular-nums text-muted-foreground">0{i + 1}</span>
+                  <h3 className="mt-2 text-lg font-semibold">{l.judul}</h3>
+                  <p className="mt-2 text-muted-foreground">{l.isi}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { icon: Stethoscope, title: "Transkripsi Medis", desc: "AI yang memahami terminologi medis Indonesia" },
-              { icon: FileText, title: "Draf SOAP Otomatis", desc: "Subjektif, Objektif, Assessment, Plan dalam hitungan detik" },
-              { icon: CheckCircle, title: "Saran ICD-10", desc: "Rekomendasi kode diagnosis berdasarkan percakapan" },
-              { icon: Shield, title: "Integrasi SATUSEHAT", desc: "Kirim ke Kemenkes dengan format FHIR standar" },
-              { icon: Users, title: "Multi-Tenancy", desc: "Satu aplikasi untuk seluruh Puskesmas di Indonesia" },
-              { icon: Zap, title: "Real-time", desc: "Hasil transkrip muncul saat konsultasi berlangsung" },
-            ].map((f, i) => (
-              <div key={i} className="flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors">
-                <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
-                  <f.icon className="w-5 h-5 text-emerald-400" />
+        <section className="border-t">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Peran di puskesmas</h2>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              Setiap puskesmas punya organisasi sendiri di Steto, dan tiap anggota punya peran.
+            </p>
+            <dl className="mt-10 grid gap-x-10 sm:grid-cols-2">
+              {PERAN.map((p) => (
+                <div key={p.peran} className="flex flex-col gap-1 border-b py-5 sm:flex-row sm:gap-6">
+                  <dt className="font-medium sm:w-32 sm:shrink-0">{p.peran}</dt>
+                  <dd className="text-muted-foreground">{p.isi}</dd>
                 </div>
-                <div>
-                  <h3 className="font-medium text-white mb-1">{f.title}</h3>
-                  <p className="text-sm text-slate-400">{f.desc}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </dl>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* CTA */}
-      <section className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Siap memulai?
-          </h2>
-          <p className="text-slate-400 mb-8">
-            Daftar gratis dan mulai gunakan Steto di Puskesmas Anda hari ini.
+      <footer className="border-t">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <Brand className="h-6" />
+          <p>
+            Kode sumber di{" "}
+            <a href="https://github.com/azrahudaya/steto" className="font-medium text-foreground underline underline-offset-4">
+              GitHub
+            </a>
+            , lisensi MIT.
           </p>
-          <SignInButton mode="modal">
-            <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 h-12">
-              Mulai Gratis
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </SignInButton>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-white/5">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Steto" width={24} height={9} className="h-6 w-auto" />
-            <span className="text-slate-400 text-sm">© 2026 Steto</span>
-          </div>
-          <div className="flex gap-6 text-sm text-slate-400">
-            <Link href="/privasi" className="hover:text-white transition-colors">Privasi</Link>
-            <Link href="/ketentuan" className="hover:text-white transition-colors">Ketentuan</Link>
-            <Link href="https://github.com/azrahudaya/steto" className="hover:text-white transition-colors">GitHub</Link>
-          </div>
         </div>
       </footer>
     </div>

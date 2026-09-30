@@ -1,52 +1,49 @@
-import Link from "next/link";
-import Image from "next/image";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { AppNav } from "@/components/app-nav";
+import { Brand } from "@/components/brand";
+import { PeranProvider } from "@/components/peran-context";
+import { Terbatas } from "@/components/terbatas";
+import { bacaPeran } from "@/lib/peran";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) redirect("/");
-  const { userId, orgId } = await auth();
+  const { userId, orgId, orgRole } = await auth();
   if (!userId) redirect("/sign-in");
   if (!orgId) redirect("/app/pilih-puskesmas");
-  
+  const admin = orgRole === "org:admin";
+  const user = await currentUser();
+  const peran = bacaPeran(user?.publicMetadata?.peran) ?? (admin ? "admin" : null);
+
   return (
-    <div className="min-h-screen bg-slate-950">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-slate-950 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/app" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Steto" width={28} height={11} className="h-7 w-auto" />
-            <span className="text-lg font-semibold text-white">Steto</span>
-          </Link>
-          
-          <div className="flex items-center gap-4">
-            <OrganizationSwitcher 
+    <div className="min-h-dvh">
+      {/* The only translucent surface: content scrolls under the sticky header and stays legible. */}
+      <header className="sticky top-0 z-40 border-b bg-background/95 supports-backdrop-filter:bg-background/80 supports-backdrop-filter:backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
+          <Brand href="/app/pasien" className="h-7" />
+          <AppNav admin={admin} />
+          <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3">
+            <OrganizationSwitcher
               hidePersonal
-              appearance={{
-                elements: {
-                  organizationSwitcherTrigger: "bg-slate-800 border-white/10 text-white hover:bg-slate-700 rounded-lg px-3 py-2",
-                  organizationSwitcherTriggerIcon: "text-slate-400",
-                  organizationPreviewMainIdentifier: "text-white font-medium",
-                  organizationPreviewAvatarBox: "rounded-lg",
-                }
-              }}
+              afterSelectOrganizationUrl="/app/pasien"
+              afterLeaveOrganizationUrl="/app/pilih-puskesmas"
+              appearance={{ elements: { rootBox: "min-w-0 max-w-48 sm:max-w-none" } }}
             />
-            <UserButton 
-              appearance={{
-                elements: {
-                  userButtonTrigger: "focus:shadow-none",
-                  userButtonBox: "text-white",
-                }
-              }}
-            />
+            <UserButton />
           </div>
         </div>
+        <AppNav admin={admin} mobile />
       </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {children}
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        {peran ? (
+          <PeranProvider peran={peran}>{children}</PeranProvider>
+        ) : (
+          <Terbatas
+            judul="Menunggu peran dari admin"
+            isi="Akun ini sudah masuk ke puskesmas, tapi belum punya peran. Minta admin menetapkan peran dokter, bidan, perawat, atau rekam medis."
+          />
+        )}
       </main>
     </div>
   );

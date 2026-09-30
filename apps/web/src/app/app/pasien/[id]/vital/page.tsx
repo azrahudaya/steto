@@ -1,157 +1,143 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { 
-  ArrowLeft,
-  Heart,
-  Activity,
-  Thermometer,
-  Droplets,
-  Scale,
-  Ruler
-} from "lucide-react";
+"use client";
 
-// Mock data vital signs
-const vitalSigns = {
-  patientName: "Ahmad Sulaiman",
-  patientNik: "3171234567890001",
-  visitDate: "2026-09-30",
-  bloodPressureSystolic: 120,
-  bloodPressureDiastolic: 80,
-  heartRate: 78,
-  temperature: 36.5,
-  respiratoryRate: 16,
-  weight: 68,
-  height: 170,
-  oxygenSaturation: 98,
-};
+import Link from "next/link";
+import { useState } from "react";
+import { usePasien } from "@/components/pasien-context";
+import { usePeran } from "@/components/peran-context";
+import { Terbatas } from "@/components/terbatas";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { VITAL_FIELD, type Vital } from "@/lib/contoh";
+import { boleh } from "@/lib/peran";
+import { simpanVital, useVital } from "@/lib/store";
+
+type Nilai = Record<keyof Vital, string>;
+const KOSONG = Object.fromEntries(VITAL_FIELD.map((f) => [f.key, ""])) as Nilai;
+
+function keTeks(v: Vital): Nilai {
+  return Object.fromEntries(VITAL_FIELD.map((f) => [f.key, String(v[f.key]).replace(".", ",")])) as Nilai;
+}
+
+const jam = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Jakarta" });
+
+function Field({
+  f,
+  nilai,
+  galat,
+  onChange,
+}: {
+  f: (typeof VITAL_FIELD)[number];
+  nilai: string;
+  galat?: string;
+  onChange: (v: string) => void;
+}) {
+  const id = `vital-${f.key}`;
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={id}>{f.label}</Label>
+      <div className="relative">
+        <Input
+          id={id}
+          inputMode="decimal"
+          autoComplete="off"
+          className="pr-20 tabular-nums"
+          value={nilai}
+          onChange={(e) => onChange(e.target.value)}
+          aria-invalid={Boolean(galat)}
+          aria-describedby={galat ? `${id}-galat` : `${id}-satuan`}
+        />
+        <span id={`${id}-satuan`} className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">
+          {f.satuan}
+        </span>
+      </div>
+      {galat && (
+        <p id={`${id}-galat`} className="text-sm text-destructive">
+          {galat}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function VitalPage() {
+  const pasien = usePasien();
+  const peran = usePeran();
+  const tersimpan = useVital(pasien.id);
+  const [draf, setDraf] = useState<Nilai | null>(null);
+  const [galat, setGalat] = useState<Partial<Record<keyof Vital, string>>>({});
+  const [pesan, setPesan] = useState("");
+
+  if (!boleh(peran, "vital")) {
+    return <Terbatas judul="Tanda vital diisi perawat" isi="Peran Anda bisa melihat hasilnya di layar tinjauan." />;
+  }
+
+  const nilai = draf ?? (tersimpan ? keTeks(tersimpan) : KOSONG);
+
+  function kirim(e: React.FormEvent) {
+    e.preventDefault();
+    const g: Partial<Record<keyof Vital, string>> = {};
+    const hasil = {} as Vital;
+    for (const f of VITAL_FIELD) {
+      const raw = nilai[f.key].trim().replace(",", ".");
+      const n = Number(raw);
+      if (!raw) g[f.key] = `Isi ${f.label.toLowerCase()}.`;
+      else if (!Number.isFinite(n) || (!f.desimal && !Number.isInteger(n))) g[f.key] = `${f.label} harus angka${f.desimal ? "" : " bulat"}.`;
+      else if (n < f.min || n > f.max) g[f.key] = `${f.label} di luar ${f.min} sampai ${f.max} ${f.satuan}.`;
+      else hasil[f.key] = n;
+    }
+    if (!g.sistol && !g.diastol && hasil.diastol >= hasil.sistol) g.diastol = "Diastol harus lebih kecil dari sistol.";
+    setGalat(g);
+    const pertama = VITAL_FIELD.find((f) => g[f.key]);
+    if (pertama) {
+      setPesan("");
+      document.getElementById(`vital-${pertama.key}`)?.focus();
+      return;
+    }
+    simpanVital(pasien.id, hasil);
+    setDraf(null);
+    setPesan(`Tersimpan pukul ${jam.format(new Date())}.`);
+  }
+
+  const ubah = (k: keyof Vital) => (v: string) => {
+    setDraf({ ...nilai, [k]: v });
+    setPesan("");
+  };
+  const [sistol, diastol, ...lain] = VITAL_FIELD;
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link 
-          href="/app/pasien"
-          className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold text-white">Tanda Vital</h1>
-          <p className="text-slate-400">{vitalSigns.patientName} • {vitalSigns.patientNik}</p>
+    <form noValidate onSubmit={kirim} className="space-y-6">
+      <section className="rounded-xl border bg-card p-5 sm:p-6">
+        <h2 className="text-lg font-semibold">Tanda vital</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Diukur sebelum pasien masuk ruang periksa.</p>
+
+        <fieldset className="mt-6">
+          <legend className="mb-3 text-sm font-medium text-muted-foreground">Tekanan darah</legend>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[sistol, diastol].map((f) => (
+              <Field key={f.key} f={f} nilai={nilai[f.key]} galat={galat[f.key]} onChange={ubah(f.key)} />
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="mt-6 grid gap-4 border-t pt-6 sm:grid-cols-2 lg:grid-cols-4">
+          {lain.map((f) => (
+            <Field key={f.key} f={f} nilai={nilai[f.key]} galat={galat[f.key]} onChange={ubah(f.key)} />
+          ))}
         </div>
+      </section>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit">Simpan tanda vital</Button>
+        {tersimpan && boleh(peran, "rekam") && (
+          <Link href={`/app/pasien/${pasien.id}/rekam`} className={buttonVariants({ variant: "outline" })}>
+            Lanjut ke rekam
+          </Link>
+        )}
+        <p className="text-sm text-muted-foreground" aria-live="polite">
+          {pesan || (tersimpan && !draf ? "Tanda vital sudah tersimpan." : "")}
+        </p>
       </div>
-
-      {/* Visit Info */}
-      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-        <p className="text-sm text-slate-400">Tanggal Kunjungan</p>
-        <p className="text-lg text-white font-medium">{vitalSigns.visitDate}</p>
-      </div>
-
-      {/* Vital Signs Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Blood Pressure */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
-              <Activity className="w-5 h-5 text-red-400" />
-            </div>
-            <p className="text-sm text-slate-400">Tekanan Darah</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.bloodPressureSystolic}/{vitalSigns.bloodPressureDiastolic}
-            <span className="text-lg text-slate-400 ml-1">mmHg</span>
-          </p>
-        </div>
-
-        {/* Heart Rate */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center">
-              <Heart className="w-5 h-5 text-pink-400" />
-            </div>
-            <p className="text-sm text-slate-400">Nadi</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.heartRate}
-            <span className="text-lg text-slate-400 ml-1">bpm</span>
-          </p>
-        </div>
-
-        {/* Temperature */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
-              <Thermometer className="w-5 h-5 text-orange-400" />
-            </div>
-            <p className="text-sm text-slate-400">Suhu</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.temperature}
-            <span className="text-lg text-slate-400 ml-1">°C</span>
-          </p>
-        </div>
-
-        {/* Respiratory Rate */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
-              <Droplets className="w-5 h-5 text-cyan-400" />
-            </div>
-            <p className="text-sm text-slate-400">Pernapasan</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.respiratoryRate}
-            <span className="text-lg text-slate-400 ml-1">x/menit</span>
-          </p>
-        </div>
-
-        {/* Weight */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <Scale className="w-5 h-5 text-emerald-400" />
-            </div>
-            <p className="text-sm text-slate-400">Berat Badan</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.weight}
-            <span className="text-lg text-slate-400 ml-1">kg</span>
-          </p>
-        </div>
-
-        {/* Height */}
-        <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
-              <Ruler className="w-5 h-5 text-violet-400" />
-            </div>
-            <p className="text-sm text-slate-400">Tinggi Badan</p>
-          </div>
-          <p className="text-3xl font-bold text-white">
-            {vitalSigns.height}
-            <span className="text-lg text-slate-400 ml-1">cm</span>
-          </p>
-        </div>
-      </div>
-
-      {/* SpO2 */}
-      <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-              <Activity className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-400">Saturasi Oksigen</p>
-              <p className="text-2xl font-bold text-white">{vitalSigns.oxygenSaturation}%</p>
-            </div>
-          </div>
-          <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-sm">
-            Normal
-          </span>
-        </div>
-      </div>
-    </div>
+    </form>
   );
 }
