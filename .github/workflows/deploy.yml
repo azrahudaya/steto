@@ -4,21 +4,36 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
           host: 213.163.192.71
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 20m
           script: |
+            set -e
             cd /opt/steto
-            git pull origin main || git clone https://github.com/azrahudaya/steto.git .
-            docker compose pull || true
+            git fetch --quiet origin main
+            git reset --quiet --hard origin/main
+            echo "deployed commit: $(git rev-parse --short HEAD)"
+            test "$(git rev-parse HEAD)" = "${{ github.sha }}"
             docker compose up -d --build
-            docker system prune -f
+            docker image prune -f
+
+      - name: Health check
+        run: |
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" https://steto.tech/api/health || true)
+            if [ "$code" = "200" ]; then echo "health ok"; exit 0; fi
+            echo "attempt $i: $code"; sleep 6
+          done
+          echo "health check failed"; exit 1
