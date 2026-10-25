@@ -26,7 +26,8 @@ jobs:
             git reset --quiet --hard origin/main
             echo "deployed commit: $(git rev-parse --short HEAD)"
             test "$(git rev-parse HEAD)" = "${{ github.sha }}"
-            docker compose up -d --build
+            docker compose build --pull web
+            docker compose up -d --force-recreate --no-deps web
             docker image prune -f
 
       - name: Health check
