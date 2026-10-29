@@ -91,6 +91,7 @@ export default function Home() {
             <a href="#example">Sample record</a>
             <a href="#safeguards">Safeguards</a>
             <a href="#faq">FAQ</a>
+            <Link href="/panduan">Panduan</Link>
           </div>
           <Link href="/sign-in" className="btn btn-neutral nav-signin">Sign in</Link>
         </nav>
@@ -222,6 +223,8 @@ export default function Home() {
           <a href="#example">Sample</a>
           <a href="#safeguards">Safeguards</a>
           <a href="#faq">FAQ</a>
+          <Link href="/panduan">Panduan</Link>
+          <Link href="/kebijakan-privasi">Privasi</Link>
           <Link href="/sign-in">Sign in</Link>
         </div>
         <p className="footer-copy">Notes that start with the conversation.</p>

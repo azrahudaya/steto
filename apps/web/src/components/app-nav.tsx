@@ -6,9 +6,10 @@ import { Brand } from "@/components/brand";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/app/pasien", label: "Patients" },
-  { href: "/app/organisasi", label: "Organization" },
-  { href: "/app/akun", label: "Account" },
+  { href: "/app/pasien", label: "Pasien" },
+  { href: "/app/satusehat", label: "SATUSEHAT" },
+  { href: "/app/organisasi", label: "Organisasi" },
+  { href: "/app/akun", label: "Akun" },
 ];
 
 export function AppNav({ sample }: { sample?: boolean }) {
