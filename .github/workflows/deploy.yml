@@ -1,40 +1,29 @@
-name: Deploy
+name: CI
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 concurrency:
-  group: deploy-production
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-web:
+    name: Build Web (Static Export)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
     steps:
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          host: 213.163.192.71
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 20m
-          script: |
-            set -e
-            cd /opt/steto
-            git fetch --quiet origin main
-            git reset --quiet --hard origin/main
-            echo "deployed commit: $(git rev-parse --short HEAD)"
-            test "$(git rev-parse HEAD)" = "${{ github.sha }}"
-            docker compose build --pull web
-            docker compose up -d --force-recreate --no-deps web
-            docker image prune -f
-
-      - name: Health check
-        run: |
-          for i in $(seq 1 20); do
-            code=$(curl -s -o /dev/null -w "%{http_code}" https://steto.tech/api/health || true)
-            if [ "$code" = "200" ]; then echo "health ok"; exit 0; fi
-            echo "attempt $i: $code"; sleep 6
-          done
-          echo "health check failed"; exit 1
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build

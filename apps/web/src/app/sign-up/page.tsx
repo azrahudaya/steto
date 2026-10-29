@@ -1,15 +1,17 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
+
+import { SignUp } from "@clerk/react";
 import { redirect } from "next/navigation";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) redirect("/");
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-base-200 p-4">
-      <SignIn
-        path="/sign-in"
+      <SignUp
+        path="/sign-up"
         routing="path"
-        signUpUrl="/sign-up"
+        signInUrl="/sign-in"
         appearance={{
           elements: {
             rootBox: "card w-full max-w-md bg-base-100 shadow-xl",
@@ -26,7 +28,6 @@ export default function SignInPage() {
             formFieldAction: "link link-primary text-sm",
             footerAction: "link link-primary",
             footer: "mt-6 border-t pt-6 text-center text-sm",
-            identityPreview: "rounded-lg border p-3",
           },
         }}
       />

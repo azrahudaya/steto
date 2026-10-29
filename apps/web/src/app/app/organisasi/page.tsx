@@ -1,4 +1,6 @@
-import { OrganizationProfile } from "@clerk/nextjs";
+"use client";
+
+import { OrganizationProfile } from "@clerk/react";
 import { PageHeader } from "@/components/page-header";
 
 export default function OrganizationPage() {

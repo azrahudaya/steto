@@ -1,4 +1,6 @@
-import { UserProfile } from "@clerk/nextjs";
+"use client";
+
+import { UserProfile } from "@clerk/react";
 import { PageHeader } from "@/components/page-header";
 
 export default function AccountPage() {

@@ -1,11 +1,30 @@
-import { auth } from "@clerk/nextjs/server";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useAuth, OrganizationSwitcher, UserButton } from "@clerk/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { AppNav } from "@/components/app-nav";
 
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const { isLoaded, userId } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (key && isLoaded && !userId) {
+      router.replace("/sign-in");
+    }
+  }, [key, isLoaded, userId, router]);
+
+  if (key && !isLoaded) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-base-200">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (key && !userId) return null;
 
   return (
     <div className="min-h-dvh bg-base-200">

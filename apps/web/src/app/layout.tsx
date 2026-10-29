@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
-import { idID } from "@clerk/localizations";
+import { ClientClerkProvider } from "@/components/clerk-provider";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
@@ -22,11 +21,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-dvh bg-base-100 font-sans text-base-content antialiased">
-        {key ? <ClerkProvider localization={idID}>{children}</ClerkProvider> : children}
+        <ClientClerkProvider>{children}</ClientClerkProvider>
       </body>
     </html>
   );

@@ -1,11 +1,30 @@
-import { auth } from "@clerk/nextjs/server";
-import { OrganizationList } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useAuth, OrganizationList } from "@clerk/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Brand } from "@/components/brand";
 
-export default async function PilihPuskesmasPage() {
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
+export default function PilihPuskesmasPage() {
+  const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const { isLoaded, userId } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (key && isLoaded && !userId) {
+      router.replace("/sign-in");
+    }
+  }, [key, isLoaded, userId, router]);
+
+  if (key && !isLoaded) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-base-200">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (key && !userId) return null;
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-base-200 p-4">
